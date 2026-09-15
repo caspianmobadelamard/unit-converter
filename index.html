@@ -23,7 +23,24 @@
     --line:#D6DCDE;--navy:#0F1B24;--navy-2:#17323F;--steel:#2E5C8A;
     --steel-soft:#DCE7F1;--brass:#B5732A;--brass-bright:#E8912B;
     --good:#3F7A56;--good-soft:#E3F0E8;--warn:#9C4221;
-    --radius:10px;font-size:16px;
+    --radius:10px;
+
+    /* === اندازه فونت‌های قابل تنظیم === */
+    --fs-h1: 1.45rem;          /* عنوان اصلی هدر */
+    --fs-h1-sub: 0.88rem;      /* زیرعنوان هدر */
+    --fs-maintab: 0.95rem;     /* تب‌های اصلی */
+    --fs-subtab: 0.82rem;      /* تب‌های فرعی */
+    --fs-card-title: 1.18rem;  /* عنوان کارت */
+    --fs-hint: 0.88rem;        /* توضیح کارت */
+    --fs-label: 0.86rem;       /* برچسب فیلد */
+    --fs-input: 1.02rem;       /* ورودی‌ها */
+    --fs-result-num: 2.1rem;   /* عدد نتیجه اصلی */
+    --fs-result-lbl: 0.88rem;  /* برچسب نتیجه */
+    --fs-conv-ck: 0.76rem;     /* عنوان کوچک در آیتم تبدیل */
+    --fs-conv-cv: 0.95rem;     /* مقدار در آیتم تبدیل */
+    --fs-info: 0.86rem;        /* جعبه اطلاعات */
+    --fs-table: 0.86rem;       /* جدول‌ها */
+    --fs-badge: 0.74rem;       /* برچسب بالای کارت */
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -33,63 +50,146 @@
   header.topbar .brand{display:flex;align-items:center;gap:12px;}
   header.topbar .mark{width:38px;height:38px;border-radius:50%;border:2.5px solid var(--brass);display:flex;align-items:center;justify-content:center;flex:none;position:relative;}
   header.topbar .mark::after{content:"";width:13px;height:2.5px;background:var(--brass-bright);position:absolute;transform:rotate(35deg);border-radius:2px;}
-  header.topbar h1{font-size:1.16rem;margin:0;font-weight:700;}
-  header.topbar p{margin:4px 0 0;color:#9FB4C2;font-size:.78rem;}
+  header.topbar h1{font-size:var(--fs-h1);margin:0;font-weight:700;line-height:1.35;}
+  header.topbar p{margin:4px 0 0;color:#9FB4C2;font-size:var(--fs-h1-sub);}
   nav.main-tabs{display:flex;background:var(--navy-2);position:sticky;top:0;z-index:20;border-bottom:1px solid #2a4356;}
-  nav.main-tabs button{flex:1;appearance:none;border:none;background:transparent;color:#B9CBD6;padding:13px 14px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;transition:.15s;}
+  nav.main-tabs button{flex:1;appearance:none;border:none;background:transparent;color:#B9CBD6;padding:13px 14px;font-family:inherit;font-size:var(--fs-maintab);font-weight:700;cursor:pointer;border-bottom:3px solid transparent;transition:.15s;}
   nav.main-tabs button.active{color:#fff;border-bottom-color:var(--brass-bright);background:rgba(255,255,255,.04);}
-  nav.sub-tabs{display:flex;flex-wrap:wrap;background:var(--steel-soft);padding:6px 8px;gap:4px;position:sticky;top:46px;z-index:15;border-bottom:1px solid #b8c9d8;}
-  nav.sub-tabs button{appearance:none;border:1px solid transparent;background:transparent;color:var(--ink-soft);padding:6px 11px;font-family:inherit;font-size:.73rem;font-weight:600;cursor:pointer;border-radius:99px;transition:.15s;white-space:nowrap;}
+  nav.sub-tabs{display:flex;flex-wrap:wrap;background:var(--steel-soft);padding:6px 8px;gap:4px;position:sticky;top:52px;z-index:15;border-bottom:1px solid #b8c9d8;}
+  nav.sub-tabs button{appearance:none;border:1px solid transparent;background:transparent;color:var(--ink-soft);padding:6px 11px;font-family:inherit;font-size:var(--fs-subtab);font-weight:600;cursor:pointer;border-radius:99px;transition:.15s;white-space:nowrap;}
   nav.sub-tabs button.active{background:var(--steel);color:#fff;border-color:var(--steel);}
   nav.sub-tabs button:hover:not(.active){background:#fff;}
-  main{flex:1;padding:14px 12px 60px;}
+  main{flex:1;padding:14px 12px 90px;}
   .panel{display:none;}
   .panel.active{display:block;animation:fade .18s ease;}
   @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
   .card{background:var(--paper-raised);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
-  .card h2{margin:0 0 4px;font-size:1rem;color:var(--navy);}
-  .card .hint{margin:0 0 14px;color:var(--ink-soft);font-size:.8rem;line-height:1.7;}
-  label{display:block;font-size:.79rem;color:var(--ink-soft);margin-bottom:5px;font-weight:600;}
+  .card h2{margin:0 0 4px;font-size:var(--fs-card-title);color:var(--navy);line-height:1.5;}
+  .card .hint{margin:0 0 14px;color:var(--ink-soft);font-size:var(--fs-hint);line-height:1.75;}
+  label{display:block;font-size:var(--fs-label);color:var(--ink-soft);margin-bottom:5px;font-weight:600;}
   .field{margin-bottom:12px;}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
   @media(max-width:520px){.row3{grid-template-columns:1fr;}}
-  input[type=number],input[type=text],select{width:100%;padding:10px 11px;border:1.5px solid var(--line);border-radius:8px;font-family:inherit;font-size:.95rem;background:#FBFCFC;color:var(--ink);}
+  input[type=number],input[type=text],select{width:100%;padding:10px 11px;border:1.5px solid var(--line);border-radius:8px;font-family:inherit;font-size:var(--fs-input);background:#FBFCFC;color:var(--ink);}
   input:focus,select:focus{outline:2px solid var(--steel);outline-offset:1px;border-color:var(--steel);}
   select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9'><path d='M1 1l6 6 6-6' stroke='%233c4c56' stroke-width='1.6' fill='none'/></svg>");background-repeat:no-repeat;background-position:left 12px center;padding-left:30px;}
-  .unit{color:var(--ink-soft);font-size:.73rem;margin-right:4px;}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--steel);color:#fff;border:none;border-radius:8px;padding:11px 18px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;width:100%;transition:.15s;}
+  .unit{color:var(--ink-soft);font-size:0.78rem;margin-right:4px;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--steel);color:#fff;border:none;border-radius:8px;padding:11px 18px;font-family:inherit;font-size:var(--fs-input);font-weight:700;cursor:pointer;width:100%;transition:.15s;}
   .btn:hover{background:#264d75;}
   .btn.secondary{background:transparent;color:var(--steel);border:1.5px solid var(--steel);}
   .btn.secondary:hover{background:var(--steel-soft);}
   .result-main{background:linear-gradient(135deg,#E3F0E8 0%,#D4E9DD 100%);border:2px solid #BEDBC9;border-radius:10px;padding:14px;text-align:center;margin:12px 0;}
-  .result-main .num{font-size:1.9rem;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;word-break:break-all;}
-  .result-main .lbl{font-size:.78rem;color:var(--ink-soft);margin-top:4px;}
+  .result-main .num{font-size:var(--fs-result-num);font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;word-break:break-all;line-height:1.3;}
+  .result-main .lbl{font-size:var(--fs-result-lbl);color:var(--ink-soft);margin-top:4px;}
   .conv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-top:10px;}
-  .conv-item{background:#F5F7F8;border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-size:.83rem;}
-  .conv-item .ck{color:var(--ink-soft);font-size:.71rem;display:block;margin-bottom:2px;}
+  .conv-item{background:#F5F7F8;border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-size:var(--fs-conv-cv);}
+  .conv-item .ck{color:var(--ink-soft);font-size:var(--fs-conv-ck);display:block;margin-bottom:2px;}
   .conv-item .cv{font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;word-break:break-all;}
-  table.std{width:100%;border-collapse:collapse;font-size:.79rem;margin-top:6px;}
+  table.std{width:100%;border-collapse:collapse;font-size:var(--fs-table);margin-top:6px;}
   table.std th,table.std td{border:1px solid var(--line);padding:6px 8px;text-align:center;}
   table.std th{background:var(--steel-soft);color:var(--navy);}
   table.std tr:nth-child(even) td{background:#FAFCFC;}
-  .badge{display:inline-block;background:var(--brass);color:#fff;font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:99px;margin-bottom:8px;}
-  .info-box{background:#FFF7E8;border:1px solid #EAD2B8;border-right:4px solid var(--brass);border-radius:8px;padding:11px 13px;font-size:.8rem;color:var(--ink);line-height:1.8;margin-top:12px;}
+  .badge{display:inline-block;background:var(--brass);color:#fff;font-size:var(--fs-badge);font-weight:700;padding:2px 9px;border-radius:99px;margin-bottom:8px;}
+  .info-box{background:#FFF7E8;border:1px solid #EAD2B8;border-right:4px solid var(--brass);border-radius:8px;padding:11px 13px;font-size:var(--fs-info);color:var(--ink);line-height:1.85;margin-top:12px;}
   .info-box b{color:var(--navy);}
-  .disclaimer{font-size:.72rem;color:var(--ink-soft);text-align:center;padding:16px 20px;line-height:1.8;}
+  .disclaimer{font-size:0.75rem;color:var(--ink-soft);text-align:center;padding:16px 20px;line-height:1.8;}
   .disclaimer b{color:var(--navy);}
-  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:99px;font-size:.84rem;opacity:0;pointer-events:none;transition:.25s;z-index:50;}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:99px;font-size:0.88rem;opacity:0;pointer-events:none;transition:.25s;z-index:100;}
   .toast.show{opacity:1;transform:translate(-50%,-4px);}
-  .kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:.85rem;}
-  .kv:last-child{border-bottom:none;}
-  .kv .k{color:var(--ink-soft);}
-  .kv .v{font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;}
-  .gauge{background:var(--good-soft);border:1px solid #BEDBC9;border-right:5px solid var(--good);border-radius:8px;padding:11px 13px;margin-bottom:9px;}
-  .gauge .k{font-size:.76rem;color:var(--ink-soft);font-weight:600;margin-bottom:3px;}
-  .gauge .v{font-size:1.22rem;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;}
-  .gauge .v small{font-size:.66rem;font-weight:600;color:var(--ink-soft);margin-right:4px;}
-  .gauge .note{font-size:.73rem;color:var(--ink-soft);margin-top:4px;}
-  .warn{background:#FBEFE7;border:1px solid #EAD2B8;border-right:5px solid var(--warn);border-radius:8px;padding:11px 13px;color:var(--warn);font-size:.85rem;margin-bottom:9px;}
+  .warn{background:#FBEFE7;border:1px solid #EAD2B8;border-right:5px solid var(--warn);border-radius:8px;padding:11px 13px;color:var(--warn);font-size:var(--fs-info);margin-bottom:9px;}
+
+  /* === دکمه شناور تنظیمات فونت === */
+  .font-fab{
+    position:fixed; bottom:20px; left:20px; z-index:60;
+    width:54px; height:54px; border-radius:50%;
+    background:linear-gradient(135deg,var(--brass) 0%,var(--brass-bright) 100%);
+    color:#fff; border:none; cursor:pointer;
+    font-family:inherit; font-size:20px; font-weight:800;
+    box-shadow:0 6px 18px rgba(181,115,42,.4);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .font-fab:hover{ transform:scale(1.08); box-shadow:0 8px 22px rgba(181,115,42,.55); }
+  .font-fab:active{ transform:scale(0.96); }
+
+  /* === پنل تنظیمات === */
+  .font-panel{
+    position:fixed; top:0; right:0; bottom:0; width:min(400px, 92vw);
+    background:#fff; z-index:80; box-shadow:-8px 0 30px rgba(0,0,0,.2);
+    transform:translateX(105%); transition:transform .28s cubic-bezier(.4,.2,.2,1);
+    display:flex; flex-direction:column; overflow-y:auto;
+    border-left:4px solid var(--brass);
+  }
+  .font-panel.open{ transform:translateX(0); }
+  .font-panel-header{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:16px 18px; border-bottom:1px solid var(--line);
+    background:var(--navy); color:#EAF0F4; position:sticky; top:0; z-index:2;
+  }
+  .font-panel-header h3{ margin:0; font-size:1.08rem; font-weight:700; }
+  .font-close{
+    width:34px; height:34px; border-radius:50%; border:none;
+    background:rgba(255,255,255,.15); color:#fff; font-size:1.4rem;
+    cursor:pointer; font-family:inherit; line-height:1;
+  }
+  .font-close:hover{ background:rgba(255,255,255,.28); }
+  .font-panel-hint{
+    padding:12px 18px 4px; margin:0; color:var(--ink-soft);
+    font-size:0.84rem; line-height:1.7;
+  }
+  .font-sliders{ padding:12px 18px 20px; flex:1; }
+  .font-slider-row{ margin-bottom:16px; }
+  .font-slider-row .fsr-head{
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;
+  }
+  .font-slider-row .fsr-label{ font-size:0.88rem; font-weight:600; color:var(--ink); }
+  .font-slider-row .fsr-value{
+    font-size:0.8rem; color:var(--steel); font-weight:700;
+    background:var(--steel-soft); padding:2px 8px; border-radius:99px;
+    font-variant-numeric:tabular-nums;
+  }
+  .font-slider-row input[type=range]{
+    width:100%; appearance:none; -webkit-appearance:none; height:6px; border-radius:3px;
+    background:linear-gradient(90deg, var(--steel-soft), var(--steel));
+    outline:none; cursor:pointer;
+  }
+  .font-slider-row input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:20px; height:20px; border-radius:50%;
+    background:var(--brass); border:3px solid #fff;
+    box-shadow:0 2px 6px rgba(0,0,0,.25); cursor:pointer;
+  }
+  .font-slider-row input[type=range]::-moz-range-thumb{
+    width:20px; height:20px; border-radius:50%;
+    background:var(--brass); border:3px solid #fff;
+    box-shadow:0 2px 6px rgba(0,0,0,.25); cursor:pointer;
+  }
+  .font-slider-row .fsr-sample{
+    margin-top:5px; padding:6px 10px; background:#F5F7F8;
+    border-radius:6px; border:1px dashed var(--line);
+    color:var(--ink-soft); text-align:center;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .font-panel-footer{
+    padding:14px 18px; border-top:1px solid var(--line);
+    background:#F5F7F8; position:sticky; bottom:0;
+  }
+  .font-reset-btn{
+    width:100%; padding:11px; border-radius:8px; border:1.5px solid var(--warn);
+    background:transparent; color:var(--warn); font-family:inherit;
+    font-size:0.88rem; font-weight:700; cursor:pointer;
+  }
+  .font-reset-btn:hover{ background:#FBEFE7; }
+
+  .font-overlay{
+    position:fixed; inset:0; background:rgba(15,27,36,.45);
+    z-index:70; opacity:0; pointer-events:none; transition:opacity .25s;
+  }
+  .font-overlay.show{ opacity:1; pointer-events:auto; }
+
+  @media(max-width:600px){
+    .font-panel{ width:100vw; }
+    .font-fab{ width:48px; height:48px; font-size:17px; bottom:16px; left:16px; }
+  }
 </style>
 </head>
 <body>
@@ -147,6 +247,23 @@
   </p>
 </div>
 
+<!-- === دکمه تنظیمات فونت === -->
+<button id="fontBtn" class="font-fab" title="تنظیم اندازه فونت">Aa</button>
+
+<!-- === پنل تنظیمات فونت === -->
+<div id="fontPanel" class="font-panel" aria-hidden="true">
+  <div class="font-panel-header">
+    <h3>تنظیم اندازه فونت</h3>
+    <button id="fontClose" class="font-close">×</button>
+  </div>
+  <p class="font-panel-hint">هر بخش را مستقیم و مستقل از بقیه تنظیم کنید. تنظیمات به‌صورت خودکار ذخیره می‌شود.</p>
+  <div id="fontSliders" class="font-sliders"></div>
+  <div class="font-panel-footer">
+    <button id="fontReset" class="font-reset-btn">بازنشانی همه به پیش‌فرض</button>
+  </div>
+</div>
+<div id="fontOverlay" class="font-overlay"></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -156,7 +273,6 @@ function fmt(v,d=2){ if(!isFinite(v)) return '—'; return Number(v).toLocaleStr
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1700); }
 
 /* ==================== UNIT DATA ==================== */
-/* هر دسته: base = واحد پایه، units = {کلید: {label, factor یا special}} */
 const UNITS = {
   heat: {
     title:'ظرفیت حرارتی / توان',
@@ -474,7 +590,6 @@ function loadUnit(){
   document.getElementById('unitTitle').textContent = u.title;
   document.getElementById('unitHint').textContent = u.hint || '';
 
-  // از لیست واحدها
   const fromSel = document.getElementById('uFrom');
   fromSel.innerHTML = '';
   Object.keys(u.units).forEach(k=>{
@@ -484,7 +599,6 @@ function loadUnit(){
     fromSel.appendChild(o);
   });
 
-  // info box
   const ib = document.getElementById('unitInfo');
   if(activeUnit==='pipe'){
     ib.style.display = 'block';
@@ -525,7 +639,6 @@ function renderUnit(){
 
   const grid = document.getElementById('uGrid');
 
-  // ---- TEMPERATURE ----
   if(u.special === 'temp'){
     const c = convertTempValue(v, from, 'C');
     const f = convertTempValue(v, from, 'F');
@@ -539,17 +652,13 @@ function renderUnit(){
     return;
   }
 
-  // ---- PIPE SIZE ----
   if(u.special === 'pipe'){
-    // ورودی: NPS (رشته) یا DN/OD (عدد)
     let found = null;
     if(from === 'NPS'){
-      // جستجو با رشته NPS
       const inp = document.getElementById('uVal');
       const raw = (inp.value||'').toString().trim().replace('"','').replace('″','').replace('“','').replace('”','');
-      found = PIPE_TABLE.find(p => p.nps === raw || p.nps === raw.replace('/', '/'));
+      found = PIPE_TABLE.find(p => p.nps === raw);
       if(!found){
-        // اگر عدد وارد شده، اولین سایز بزرگتر را پیدا کن
         const num = parseFloat(raw);
         if(!isNaN(num)) found = PIPE_TABLE.find(p => parseFloat(p.nps)>=num) || PIPE_TABLE[PIPE_TABLE.length-1];
       }
@@ -577,7 +686,6 @@ function renderUnit(){
     return;
   }
 
-  // ---- STANDARD ----
   const fromU = u.units[from];
   const baseVal = v * fromU.factor;
   const baseU = u.units[u.base];
@@ -628,7 +736,6 @@ function buildPracTabs(){
   });
 }
 
-/* --- Helper convert flow to GPM, m³/h, L/s, etc. --- */
 const FLOW_TO_M3H = {
   m3_hr:1, L_min:0.06, L_s:3.6, GPM_US:0.227125, GPM_UK:0.272765, CFM:1.699, m3_s:3600, ft3_hr:0.0283168
 };
@@ -645,9 +752,7 @@ function renderPrac(){
   else if(activePrac === 'fluids') c.innerHTML = renderFluids();
 }
 
-/* ============================================================
-   1) دبی ↔ حجم مخزن
-   ============================================================ */
+/* === 1) دبی ↔ حجم مخزن === */
 function renderFlowVol(){
   return `
   <div class="card">
@@ -708,9 +813,7 @@ function calcFlowVol(){
     </div>`;
 }
 
-/* ============================================================
-   2) دبی جرمی ↔ حجمی
-   ============================================================ */
+/* === 2) دبی جرمی ↔ حجمی === */
 const FLUIDS = [
   {key:'water20', name:'آب (۲۰°C)', rho:998},
   {key:'water90', name:'آب داغ (۹۰°C)', rho:965},
@@ -793,9 +896,7 @@ function calcMassVol(){
     </div>`;
 }
 
-/* ============================================================
-   3) بخار ↔ حرارت ↔ سوخت
-   ============================================================ */
+/* === 3) بخار ↔ حرارت ↔ سوخت === */
 const STEAM_SAT = [
   {p:0.3, t:69.1, hf:289.3, hfg:2336.1, vg:5.229},
   {p:0.5, t:81.3, hf:340.6, hfg:2305.4, vg:3.24},
@@ -868,12 +969,12 @@ function calcSteamHeat(){
 
   const pAbs = p + 1.013;
   const sp = interpSteam(pAbs);
-  const hSteam = sp.hf + sp.hfg * x;   // kJ/kg
-  const hFeed = tf * 4.187;             // kJ/kg
+  const hSteam = sp.hf + sp.hfg * x;
+  const hFeed = tf * 4.187;
   const dH = hSteam - hFeed;
-  const qKW = flow * dH / 3600;         // kW
+  const qKW = flow * dH / 3600;
   const qKcal = qKW * 860.421;
-  const qInput = qKcal / eff;           // kcal/hr ورودی
+  const qInput = qKcal / eff;
 
   const f = FUELS_DATA[fuelKey];
   let fuelRate, fuelUnit;
@@ -902,9 +1003,7 @@ function calcSteamHeat(){
     </div>`;
 }
 
-/* ============================================================
-   4) ظرفیت دیگ ↔ BHP ↔ TR
-   ============================================================ */
+/* === 4) ظرفیت دیگ ↔ BHP ↔ TR === */
 function renderBoilerCap(){
   return `
   <div class="card">
@@ -934,13 +1033,12 @@ function calcBoilerCap(){
   const v = n(document.getElementById('bc_val').value);
   const u = document.getElementById('bc_unit').value;
 
-  // تبدیل همه به kcal/hr پایه
   let kcal;
   if(u==='kW') kcal = v * 860.421;
   else if(u==='kcal_hr') kcal = v;
   else if(u==='MW') kcal = v * 860421;
   else if(u==='BHP') kcal = v * 8434.5;
-  else if(u==='kg_hr_steam') kcal = v * 539;  // گرمای نهان تقریبی
+  else if(u==='kg_hr_steam') kcal = v * 539;
   else if(u==='BTU_hr') kcal = v * 0.252;
   else if(u==='TR') kcal = v * 3024.84;
   else if(u==='HP') kcal = v * 641.19;
@@ -965,9 +1063,7 @@ function calcBoilerCap(){
     </div>`;
 }
 
-/* ============================================================
-   5) فشار ↔ ستون آب ↔ Head پمپ
-   ============================================================ */
+/* === 5) فشار ↔ ستون آب ↔ Head === */
 function renderPressHead(){
   return `
   <div class="card">
@@ -996,7 +1092,6 @@ function renderPressHead(){
 function calcPressHead(){
   const v = n(document.getElementById('ph_val').value);
   const u = document.getElementById('ph_unit').value;
-  // به m H2O پایه
   const to_mH2O = {bar:10.1972, psi:0.70307, kPa:0.101972, MPa:101.972, mH2O:1, mmH2O:0.001, kg_cm2:10, atm:10.3323};
   const mH2O = v * to_mH2O[u];
   const bar = mH2O / 10.1972;
@@ -1023,9 +1118,7 @@ function calcPressHead(){
     </div>`;
 }
 
-/* ============================================================
-   6) سختی‌گیر: ppm·m³ ↔ grain
-   ============================================================ */
+/* === 6) سختی‌گیر === */
 function renderSoftener(){
   return `
   <div class="card">
@@ -1056,9 +1149,9 @@ function calcSoftener(){
 
   if(hard<=0||flow<=0||days<=0||cap<=0){ document.getElementById('sf_result').innerHTML=''; return; }
 
-  const volPerCycle = flow * hours * days;             // m³
-  const ppmM3 = hard * volPerCycle;                    // ppm·m³
-  const grain_US = ppmM3 * 1000 / 17.12;               // grain (US)
+  const volPerCycle = flow * hours * days;
+  const ppmM3 = hard * volPerCycle;
+  const grain_US = ppmM3 * 1000 / 17.12;
   const grainWithMargin = grain_US * 1.3;
   const resinFt3 = grainWithMargin / cap;
   const resinL = resinFt3 * 28.317;
@@ -1088,9 +1181,7 @@ function calcSoftener(){
     </div>`;
 }
 
-/* ============================================================
-   7) جدول مرجع سیالات
-   ============================================================ */
+/* === 7) جدول مرجع سیالات === */
 function renderFluids(){
   const rows = [
     ['آب (۲۰°C)', '998', '4.18', '—', '—'],
@@ -1127,6 +1218,108 @@ function renderFluids(){
 
 buildPracTabs();
 renderPrac();
+
+/* ==================== FONT SIZE SETTINGS ==================== */
+const FONT_GROUPS = [
+  { key:'h1',         label:'عنوان اصلی هدر',      var:'--fs-h1',        def:1.45, min:0.9, max:2.6, step:0.05, sample:'ماشین‌حساب تبدیل واحد' },
+  { key:'h1Sub',      label:'زیرعنوان هدر',        var:'--fs-h1-sub',    def:0.88, min:0.6, max:1.6, step:0.02, sample:'Caspian Mobaddel Amard' },
+  { key:'maintab',    label:'تب‌های اصلی',         var:'--fs-maintab',   def:0.95, min:0.7, max:1.5, step:0.02, sample:'🔄 تبدیل واحد · 🧮 محاسبات' },
+  { key:'subtab',     label:'تب‌های فرعی',         var:'--fs-subtab',    def:0.82, min:0.6, max:1.4, step:0.02, sample:'فشار · حجم · سختی آب' },
+  { key:'cardTitle',  label:'عنوان کارت',          var:'--fs-card-title',def:1.18, min:0.85,max:2.0, step:0.03, sample:'تبدیل دبی به حجم مخزن' },
+  { key:'hint',       label:'توضیح کارت',          var:'--fs-hint',      def:0.88, min:0.65,max:1.4, step:0.02, sample:'این محاسبه برای طراحی مخازن...' },
+  { key:'label',      label:'برچسب فیلد',          var:'--fs-label',     def:0.86, min:0.65,max:1.4, step:0.02, sample:'مقدار ورودی' },
+  { key:'input',      label:'ورودی‌ها و منوها',    var:'--fs-input',     def:1.02, min:0.75,max:1.6, step:0.02, sample:'۳۰۰۰ kg/hr' },
+  { key:'resultNum',  label:'عدد نتیجه اصلی',      var:'--fs-result-num',def:2.10, min:1.2, max:3.8, step:0.05, sample:'۱٬۲۳۴.۵' },
+  { key:'resultLbl',  label:'برچسب نتیجه',         var:'--fs-result-lbl',def:0.88, min:0.65,max:1.4, step:0.02, sample:'حجم مخزن لازم' },
+  { key:'convCk',     label:'عنوان در آیتم تبدیل', var:'--fs-conv-ck',   def:0.76, min:0.55,max:1.3, step:0.02, sample:'کیلووات' },
+  { key:'convCv',     label:'مقدار در آیتم تبدیل', var:'--fs-conv-cv',   def:0.95, min:0.7, max:1.6, step:0.02, sample:'۸۶۰.۴۲' },
+  { key:'info',       label:'جعبه اطلاعات',        var:'--fs-info',      def:0.86, min:0.65,max:1.4, step:0.02, sample:'محاسبه: ۵۰۰۰ × ...' },
+  { key:'table',      label:'جدول‌ها',             var:'--fs-table',     def:0.86, min:0.65,max:1.4, step:0.02, sample:'چگالی | Cp | ...' },
+  { key:'badge',      label:'برچسب بالای کارت',    var:'--fs-badge',     def:0.74, min:0.55,max:1.3, step:0.02, sample:'Flow ↔ Tank Volume' },
+];
+
+const FONT_STORAGE_KEY = 'cma_font_settings_v1';
+
+function loadFontSettings(){
+  try{
+    const raw = localStorage.getItem(FONT_STORAGE_KEY);
+    if(!raw) return {};
+    return JSON.parse(raw) || {};
+  }catch(e){ return {}; }
+}
+function saveFontSettings(obj){
+  try{ localStorage.setItem(FONT_STORAGE_KEY, JSON.stringify(obj)); }catch(e){}
+}
+function applyFontSetting(key, value){
+  const g = FONT_GROUPS.find(x => x.key === key);
+  if(!g) return;
+  document.documentElement.style.setProperty(g.var, value + 'rem');
+}
+function applyAllFontSettings(){
+  const saved = loadFontSettings();
+  FONT_GROUPS.forEach(g => {
+    const v = (saved[g.key] !== undefined) ? saved[g.key] : g.def;
+    applyFontSetting(g.key, v);
+  });
+}
+
+function buildFontPanel(){
+  const container = document.getElementById('fontSliders');
+  const saved = loadFontSettings();
+  container.innerHTML = FONT_GROUPS.map(g => {
+    const val = (saved[g.key] !== undefined) ? saved[g.key] : g.def;
+    return `
+      <div class="font-slider-row">
+        <div class="fsr-head">
+          <span class="fsr-label">${g.label}</span>
+          <span class="fsr-value" id="fsv_${g.key}">${val.toFixed(2)}rem</span>
+        </div>
+        <input type="range" id="fsr_${g.key}" min="${g.min}" max="${g.max}" step="${g.step}" value="${val}" data-key="${g.key}">
+        <div class="fsr-sample" id="fss_${g.key}" style="font-size:${val}rem;">${g.sample}</div>
+      </div>`;
+  }).join('');
+
+  container.querySelectorAll('input[type=range]').forEach(slider => {
+    slider.addEventListener('input', (e) => {
+      const key = e.target.dataset.key;
+      const val = parseFloat(e.target.value);
+      applyFontSetting(key, val);
+      document.getElementById('fsv_' + key).textContent = val.toFixed(2) + 'rem';
+      document.getElementById('fss_' + key).style.fontSize = val + 'rem';
+      const saved = loadFontSettings();
+      saved[key] = val;
+      saveFontSettings(saved);
+    });
+  });
+}
+
+function resetAllFonts(){
+  FONT_GROUPS.forEach(g => {
+    applyFontSetting(g.key, g.def);
+  });
+  saveFontSettings({});
+  buildFontPanel();
+  toast('اندازه فونت‌ها بازنشانی شد');
+}
+
+applyAllFontSettings();
+buildFontPanel();
+
+const fontPanel = document.getElementById('fontPanel');
+const fontOverlay = document.getElementById('fontOverlay');
+document.getElementById('fontBtn').addEventListener('click', () => {
+  fontPanel.classList.add('open');
+  fontOverlay.classList.add('show');
+  fontPanel.setAttribute('aria-hidden','false');
+});
+function closeFontPanel(){
+  fontPanel.classList.remove('open');
+  fontOverlay.classList.remove('show');
+  fontPanel.setAttribute('aria-hidden','true');
+}
+document.getElementById('fontClose').addEventListener('click', closeFontPanel);
+fontOverlay.addEventListener('click', closeFontPanel);
+document.getElementById('fontReset').addEventListener('click', resetAllFonts);
 
 /* ==================== SERVICE WORKER ==================== */
 if('serviceWorker' in navigator){
