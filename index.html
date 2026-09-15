@@ -1,0 +1,1141 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0F1B24" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Unit Converter" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="application-name" content="Capacity Unit Converter" />
+<meta name="description" content="ماشین‌حساب تبدیل واحد و محاسبات کاربردی صنعت دیگ، مخازن و تصفیه آب — کاسپین مبدل آمارد" />
+<link rel="manifest" href="./manifest.json" />
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png" />
+<link rel="apple-touch-icon" href="./icon-192.png" />
+<title>Unit Converter — Caspian Mobaddel Amard</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#122029;--ink-soft:#3c4c56;--paper:#EEF1F2;--paper-raised:#FFFFFF;
+    --line:#D6DCDE;--navy:#0F1B24;--navy-2:#17323F;--steel:#2E5C8A;
+    --steel-soft:#DCE7F1;--brass:#B5732A;--brass-bright:#E8912B;
+    --good:#3F7A56;--good-soft:#E3F0E8;--warn:#9C4221;
+    --radius:10px;font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:"Vazirmatn",Tahoma,sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .app{max-width:1100px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+  header.topbar{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 100%);color:#EAF0F4;padding:20px 18px 16px;border-bottom:4px solid var(--brass);}
+  header.topbar .brand{display:flex;align-items:center;gap:12px;}
+  header.topbar .mark{width:38px;height:38px;border-radius:50%;border:2.5px solid var(--brass);display:flex;align-items:center;justify-content:center;flex:none;position:relative;}
+  header.topbar .mark::after{content:"";width:13px;height:2.5px;background:var(--brass-bright);position:absolute;transform:rotate(35deg);border-radius:2px;}
+  header.topbar h1{font-size:1.16rem;margin:0;font-weight:700;}
+  header.topbar p{margin:4px 0 0;color:#9FB4C2;font-size:.78rem;}
+  nav.main-tabs{display:flex;background:var(--navy-2);position:sticky;top:0;z-index:20;border-bottom:1px solid #2a4356;}
+  nav.main-tabs button{flex:1;appearance:none;border:none;background:transparent;color:#B9CBD6;padding:13px 14px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;transition:.15s;}
+  nav.main-tabs button.active{color:#fff;border-bottom-color:var(--brass-bright);background:rgba(255,255,255,.04);}
+  nav.sub-tabs{display:flex;flex-wrap:wrap;background:var(--steel-soft);padding:6px 8px;gap:4px;position:sticky;top:46px;z-index:15;border-bottom:1px solid #b8c9d8;}
+  nav.sub-tabs button{appearance:none;border:1px solid transparent;background:transparent;color:var(--ink-soft);padding:6px 11px;font-family:inherit;font-size:.73rem;font-weight:600;cursor:pointer;border-radius:99px;transition:.15s;white-space:nowrap;}
+  nav.sub-tabs button.active{background:var(--steel);color:#fff;border-color:var(--steel);}
+  nav.sub-tabs button:hover:not(.active){background:#fff;}
+  main{flex:1;padding:14px 12px 60px;}
+  .panel{display:none;}
+  .panel.active{display:block;animation:fade .18s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+  .card{background:var(--paper-raised);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+  .card h2{margin:0 0 4px;font-size:1rem;color:var(--navy);}
+  .card .hint{margin:0 0 14px;color:var(--ink-soft);font-size:.8rem;line-height:1.7;}
+  label{display:block;font-size:.79rem;color:var(--ink-soft);margin-bottom:5px;font-weight:600;}
+  .field{margin-bottom:12px;}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:520px){.row3{grid-template-columns:1fr;}}
+  input[type=number],input[type=text],select{width:100%;padding:10px 11px;border:1.5px solid var(--line);border-radius:8px;font-family:inherit;font-size:.95rem;background:#FBFCFC;color:var(--ink);}
+  input:focus,select:focus{outline:2px solid var(--steel);outline-offset:1px;border-color:var(--steel);}
+  select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9'><path d='M1 1l6 6 6-6' stroke='%233c4c56' stroke-width='1.6' fill='none'/></svg>");background-repeat:no-repeat;background-position:left 12px center;padding-left:30px;}
+  .unit{color:var(--ink-soft);font-size:.73rem;margin-right:4px;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--steel);color:#fff;border:none;border-radius:8px;padding:11px 18px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;width:100%;transition:.15s;}
+  .btn:hover{background:#264d75;}
+  .btn.secondary{background:transparent;color:var(--steel);border:1.5px solid var(--steel);}
+  .btn.secondary:hover{background:var(--steel-soft);}
+  .result-main{background:linear-gradient(135deg,#E3F0E8 0%,#D4E9DD 100%);border:2px solid #BEDBC9;border-radius:10px;padding:14px;text-align:center;margin:12px 0;}
+  .result-main .num{font-size:1.9rem;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;word-break:break-all;}
+  .result-main .lbl{font-size:.78rem;color:var(--ink-soft);margin-top:4px;}
+  .conv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-top:10px;}
+  .conv-item{background:#F5F7F8;border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-size:.83rem;}
+  .conv-item .ck{color:var(--ink-soft);font-size:.71rem;display:block;margin-bottom:2px;}
+  .conv-item .cv{font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;word-break:break-all;}
+  table.std{width:100%;border-collapse:collapse;font-size:.79rem;margin-top:6px;}
+  table.std th,table.std td{border:1px solid var(--line);padding:6px 8px;text-align:center;}
+  table.std th{background:var(--steel-soft);color:var(--navy);}
+  table.std tr:nth-child(even) td{background:#FAFCFC;}
+  .badge{display:inline-block;background:var(--brass);color:#fff;font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:99px;margin-bottom:8px;}
+  .info-box{background:#FFF7E8;border:1px solid #EAD2B8;border-right:4px solid var(--brass);border-radius:8px;padding:11px 13px;font-size:.8rem;color:var(--ink);line-height:1.8;margin-top:12px;}
+  .info-box b{color:var(--navy);}
+  .disclaimer{font-size:.72rem;color:var(--ink-soft);text-align:center;padding:16px 20px;line-height:1.8;}
+  .disclaimer b{color:var(--navy);}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:99px;font-size:.84rem;opacity:0;pointer-events:none;transition:.25s;z-index:50;}
+  .toast.show{opacity:1;transform:translate(-50%,-4px);}
+  .kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:.85rem;}
+  .kv:last-child{border-bottom:none;}
+  .kv .k{color:var(--ink-soft);}
+  .kv .v{font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;}
+  .gauge{background:var(--good-soft);border:1px solid #BEDBC9;border-right:5px solid var(--good);border-radius:8px;padding:11px 13px;margin-bottom:9px;}
+  .gauge .k{font-size:.76rem;color:var(--ink-soft);font-weight:600;margin-bottom:3px;}
+  .gauge .v{font-size:1.22rem;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;}
+  .gauge .v small{font-size:.66rem;font-weight:600;color:var(--ink-soft);margin-right:4px;}
+  .gauge .note{font-size:.73rem;color:var(--ink-soft);margin-top:4px;}
+  .warn{background:#FBEFE7;border:1px solid #EAD2B8;border-right:5px solid var(--warn);border-radius:8px;padding:11px 13px;color:var(--warn);font-size:.85rem;margin-bottom:9px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark"></div>
+      <div>
+        <h1>ماشین‌حساب تبدیل واحد صنعتی</h1>
+        <p>Caspian Mobaddel Amard — Unit Converter &amp; Practical Calculators</p>
+      </div>
+    </div>
+  </header>
+
+  <nav class="main-tabs" id="mainTabs">
+    <button class="active" data-panel="units">🔄 تبدیل واحد</button>
+    <button data-panel="practical">🧮 محاسبات کاربردی</button>
+  </nav>
+
+  <main>
+    <!-- ============ UNIT CONVERTER ============ -->
+    <section id="panel-units" class="panel active">
+      <nav class="sub-tabs" id="unitTabs"></nav>
+      <div class="card">
+        <h2 id="unitTitle">—</h2>
+        <p class="hint" id="unitHint">—</p>
+
+        <div class="row">
+          <div class="field"><label>مقدار ورودی</label><input type="number" id="uVal" value="1" step="any" oninput="renderUnit()"></div>
+          <div class="field"><label>واحد مبدأ</label><select id="uFrom" onchange="renderUnit()"></select></div>
+        </div>
+
+        <div class="result-main">
+          <div class="num" id="uBase">1</div>
+          <div class="lbl" id="uBaseLabel">—</div>
+        </div>
+
+        <div class="conv-grid" id="uGrid"></div>
+
+        <div class="info-box" id="unitInfo" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- ============ PRACTICAL CALCULATORS ============ -->
+    <section id="panel-practical" class="panel">
+      <nav class="sub-tabs" id="pracTabs"></nav>
+      <div id="pracContent"></div>
+    </section>
+
+  </main>
+
+  <p class="disclaimer">
+    محاسبات بر مبنای ASHRAE, ASPE, Spirax Sarco, DIN, EN, ASME, BS و جداول استاندارد بین‌المللی. برای طراحی نهایی، بازبینی کارشناس دیزاین الزامی است.<br>
+    <b>کاسپین مبدل آمارد</b>
+  </p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==================== HELPERS ==================== */
+function n(v){ v=parseFloat(v); return isNaN(v)?0:v; }
+function fmt(v,d=2){ if(!isFinite(v)) return '—'; return Number(v).toLocaleString('en-US',{maximumFractionDigits:d}); }
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1700); }
+
+/* ==================== UNIT DATA ==================== */
+/* هر دسته: base = واحد پایه، units = {کلید: {label, factor یا special}} */
+const UNITS = {
+  heat: {
+    title:'ظرفیت حرارتی / توان',
+    hint:'تبدیل بین واحدهای متداول بار حرارتی و توان در صنعت تاسیسات و بخار.',
+    base:'kcal_hr',
+    units:{
+      kcal_hr:{label:'kcal/hr', factor:1},
+      kW:{label:'kW', factor:860.421},
+      MW:{label:'MW', factor:860421},
+      W:{label:'W', factor:0.860421},
+      BTU_hr:{label:'BTU/hr', factor:0.252},
+      BHP:{label:'BHP (Boiler HP)', factor:8434.5},
+      TR:{label:'تن تبرید (TR)', factor:3024.84},
+      HP:{label:'HP (اسب بخار)', factor:641.19},
+      MJ_hr:{label:'MJ/hr', factor:238.846},
+    }
+  },
+  steam: {
+    title:'ظرفیت بخار',
+    hint:'واحدهای متداول اندازه‌گیری ظرفیت بخار در دیگ‌های صنعتی.',
+    base:'kg_hr',
+    units:{
+      kg_hr:{label:'kg/hr', factor:1},
+      ton_hr:{label:'ton/hr (متریک)', factor:1000},
+      lb_hr:{label:'lb/hr', factor:0.453592},
+      BHP_steam:{label:'BHP (بخار)', factor:15.65},
+      kg_s:{label:'kg/s', factor:3600},
+      g_s:{label:'g/s', factor:3.6},
+    }
+  },
+  pressure: {
+    title:'فشار',
+    hint:'تبدیل واحدهای فشار — شامل ستون آب که در Head پمپ کاربرد دارد.',
+    base:'bar',
+    units:{
+      bar:{label:'bar', factor:1},
+      psi:{label:'psi', factor:0.0689476},
+      kPa:{label:'kPa', factor:0.01},
+      MPa:{label:'MPa', factor:10},
+      N_mm2:{label:'N/mm²', factor:10},
+      kg_cm2:{label:'kg/cm²', factor:0.980665},
+      atm:{label:'atm', factor:1.01325},
+      mmHg:{label:'mmHg', factor:0.00133322},
+      mbar:{label:'mbar', factor:0.001},
+      inHg:{label:'inHg', factor:0.0338639},
+      mH2O:{label:'m H₂O (ستون آب)', factor:0.0980665},
+      mmH2O:{label:'mm H₂O', factor:0.0000980665},
+    }
+  },
+  volume: {
+    title:'حجم',
+    hint:'تبدیل واحدهای حجم — لیتر، متر مکعب، گالن، بشکه و ...',
+    base:'L',
+    units:{
+      L:{label:'لیتر (L)', factor:1},
+      m3:{label:'m³', factor:1000},
+      cm3:{label:'cm³', factor:0.001},
+      ft3:{label:'ft³', factor:28.3168},
+      in3:{label:'in³', factor:0.0163871},
+      US_gal:{label:'گالن آمریکایی', factor:3.78541},
+      UK_gal:{label:'گالن انگلیسی', factor:4.54609},
+      barrel:{label:'بشکه نفت', factor:158.987},
+      US_qt:{label:'کوارت آمریکایی', factor:0.946353},
+      US_pt:{label:'پاینت آمریکایی', factor:0.473176},
+    }
+  },
+  vflow: {
+    title:'دبی حجمی',
+    hint:'تبدیل دبی حجمی — کاربرد در فیلتر شنی، پمپ، تعویض‌کننده حرارتی.',
+    base:'m3_hr',
+    units:{
+      m3_hr:{label:'m³/hr', factor:1},
+      L_min:{label:'L/min', factor:0.06},
+      L_s:{label:'L/s', factor:3.6},
+      GPM_US:{label:'GPM (US)', factor:0.227125},
+      GPM_UK:{label:'GPM (UK)', factor:0.272765},
+      CFM:{label:'CFM (ft³/min)', factor:1.699},
+      m3_s:{label:'m³/s', factor:3600},
+      ft3_hr:{label:'ft³/hr', factor:0.0283168},
+    }
+  },
+  mflow: {
+    title:'دبی جرمی',
+    hint:'تبدیل دبی جرمی — کاربرد در بخار، آب تغذیه و کندانس.',
+    base:'kg_hr',
+    units:{
+      kg_hr:{label:'kg/hr', factor:1},
+      kg_s:{label:'kg/s', factor:3600},
+      g_s:{label:'g/s', factor:3.6},
+      lb_hr:{label:'lb/hr', factor:0.453592},
+      ton_hr:{label:'ton/hr (متریک)', factor:1000},
+      lb_min:{label:'lb/min', factor:27.2155},
+      ton_day:{label:'ton/day', factor:41.6667},
+    }
+  },
+  temp: {
+    title:'دما',
+    hint:'تبدیل بین سلسیوس، فارنهایت و کلوین.',
+    base:'C',
+    special:'temp',
+    units:{C:{label:'°C'},F:{label:'°F'},K:{label:'K'}}
+  },
+  length: {
+    title:'طول',
+    hint:'تبدیل واحدهای طول — متر، اینچ، فوت و ...',
+    base:'m',
+    units:{
+      m:{label:'متر', factor:1},
+      mm:{label:'میلی‌متر', factor:0.001},
+      cm:{label:'سانتی‌متر', factor:0.01},
+      km:{label:'کیلومتر', factor:1000},
+      in:{label:'اینچ', factor:0.0254},
+      ft:{label:'فوت', factor:0.3048},
+      yard:{label:'یارد', factor:0.9144},
+      mile:{label:'مایل', factor:1609.34},
+    }
+  },
+  area: {
+    title:'مساحت',
+    hint:'تبدیل واحدهای مساحت — متر مربع، فوت مربع، هکتار.',
+    base:'m2',
+    units:{
+      m2:{label:'m²', factor:1},
+      cm2:{label:'cm²', factor:0.0001},
+      mm2:{label:'mm²', factor:0.000001},
+      ft2:{label:'ft²', factor:0.092903},
+      in2:{label:'in²', factor:0.00064516},
+      hectare:{label:'هکتار', factor:10000},
+    }
+  },
+  mass: {
+    title:'جرم',
+    hint:'تبدیل واحدهای جرم — کیلوگرم، پوند، تن.',
+    base:'kg',
+    units:{
+      kg:{label:'کیلوگرم', factor:1},
+      g:{label:'گرم', factor:0.001},
+      mg:{label:'میلی‌گرم', factor:0.000001},
+      lb:{label:'پوند', factor:0.453592},
+      oz:{label:'اونس', factor:0.0283495},
+      ton_metric:{label:'تن متریک', factor:1000},
+      ton_US:{label:'تن آمریکایی', factor:907.185},
+      ton_UK:{label:'تن انگلیسی', factor:1016.05},
+    }
+  },
+  velocity: {
+    title:'سرعت',
+    hint:'تبدیل واحدهای سرعت — کاربرد در محاسبه سرعت سیال در لوله.',
+    base:'m_s',
+    units:{
+      m_s:{label:'m/s', factor:1},
+      km_hr:{label:'km/h', factor:0.277778},
+      ft_s:{label:'ft/s', factor:0.3048},
+      mph:{label:'mile/h', factor:0.44704},
+      knot:{label:'knot', factor:0.514444},
+    }
+  },
+  hardness: {
+    title:'سختی آب',
+    hint:'تبدیل واحدهای سختی آب — برای طراحی سختی‌گیر.',
+    base:'ppm',
+    units:{
+      ppm:{label:'ppm CaCO₃', factor:1},
+      mg_L:{label:'mg/L', factor:1},
+      grain_gal_US:{label:'grain/gal (US)', factor:17.12},
+      grain_gal_UK:{label:'grain/gal (UK)', factor:14.3},
+      french:{label:'French degree (°f)', factor:10},
+      german:{label:'German degree (°dH)', factor:17.8},
+      mmol_L:{label:'mmol/L', factor:100.09},
+      mEq_L:{label:'mEq/L', factor:50.045},
+      clark:{label:'Clark degree (°e)', factor:14.254},
+    }
+  },
+  energy: {
+    title:'انرژی / کار',
+    hint:'تبدیل واحدهای انرژی و کار.',
+    base:'kcal',
+    units:{
+      kcal:{label:'kcal', factor:1},
+      kJ:{label:'kJ', factor:0.239006},
+      kWh:{label:'kWh', factor:860.421},
+      BTU:{label:'BTU', factor:0.252},
+      MJ:{label:'MJ', factor:239.006},
+      therm:{label:'therm', factor:25210.4},
+      J:{label:'J', factor:0.000239006},
+    }
+  },
+  enthalpy: {
+    title:'آنتالپی / آنتروپی',
+    hint:'تبدیل واحدهای آنتالپی مخصوص و آنتروپی مخصوص.',
+    base:'kcal_kg',
+    units:{
+      kcal_kg:{label:'kcal/kg', factor:1},
+      kJ_kg:{label:'kJ/kg', factor:0.239006},
+      BTU_lb:{label:'BTU/lb', factor:0.5556},
+      kWh_kg:{label:'kWh/kg', factor:860.421},
+    }
+  },
+  density: {
+    title:'چگالی',
+    hint:'تبدیل واحدهای چگالی — آب، روغن، سوخت.',
+    base:'kg_m3',
+    units:{
+      kg_m3:{label:'kg/m³', factor:1},
+      g_cm3:{label:'g/cm³', factor:1000},
+      kg_L:{label:'kg/L', factor:1000},
+      lb_ft3:{label:'lb/ft³', factor:16.0185},
+      lb_gal:{label:'lb/gal (US)', factor:119.826},
+    }
+  },
+  heatx: {
+    title:'شار حرارتی / ضریب U و k',
+    hint:'تبدیل ضرایب انتقال حرارت (U) و هدایت حرارتی (k).',
+    base:'W_m2K',
+    units:{
+      W_m2K:{label:'W/(m²·K)', factor:1},
+      W_m2C:{label:'W/(m²·°C)', factor:1},
+      kcal_hr_m2C:{label:'kcal/(hr·m²·°C)', factor:1.163},
+      BTU_hr_ft2F:{label:'BTU/(hr·ft²·°F)', factor:5.67826},
+      kW_m2K:{label:'kW/(m²·K)', factor:1000},
+      W_mK:{label:'W/(m·K) — هدایت', factor:1},
+      kcal_hr_mC:{label:'kcal/(hr·m·°C)', factor:1.163},
+      BTU_hr_ftF:{label:'BTU/(hr·ft·°F)', factor:1.7307},
+    }
+  },
+  tds: {
+    title:'غلظت / TDS / شوری',
+    hint:'تبدیل واحدهای غلظت — ppm، µS/cm، درصد. رابطه تجربی ۱ µS/cm ≈ ۰.۵ تا ۰.۷ ppm (بسته به نوع نمک).',
+    base:'ppm',
+    units:{
+      ppm:{label:'ppm', factor:1},
+      mg_L:{label:'mg/L', factor:1},
+      uS_cm:{label:'µS/cm', factor:0.6},
+      mS_cm:{label:'mS/cm', factor:600},
+      percent:{label:'%', factor:10000},
+      g_L:{label:'g/L', factor:1000},
+      dS_m:{label:'dS/m (EC)', factor:600},
+    }
+  },
+  cv: {
+    title:'ضریب شیر Cv / Kv',
+    hint:'تبدیل ضریب جریان شیر (Cv آمریکایی ↔ Kv متریک). فرمول دقیق: Cv = 1.156 × Kv',
+    base:'Cv',
+    units:{
+      Cv:{label:'Cv (US GPM/√psi)', factor:1},
+      Kv:{label:'Kv (m³/hr/√bar)', factor:1.156},
+    }
+  },
+  pipe: {
+    title:'سایز لوله و اتصالات (NPS / DN / OD)',
+    hint:'جدول کامل تبدیل NPS (اینچ) ↔ DN (میلی‌متر) ↔ OD واقعی (میلی‌متر).',
+    base:'DN',
+    special:'pipe',
+    units:{NPS:{label:'NPS (اینچ)'}, DN:{label:'DN (mm)'}, OD:{label:'OD (mm)'}}
+  },
+};
+
+const PIPE_TABLE = [
+  {nps:'½', dn:15, od:21.34},
+  {nps:'¾', dn:20, od:26.67},
+  {nps:'1', dn:25, od:33.40},
+  {nps:'1¼', dn:32, od:42.16},
+  {nps:'1½', dn:40, od:48.26},
+  {nps:'2', dn:50, od:60.33},
+  {nps:'2½', dn:65, od:73.03},
+  {nps:'3', dn:80, od:88.90},
+  {nps:'4', dn:100, od:114.30},
+  {nps:'5', dn:125, od:141.30},
+  {nps:'6', dn:150, od:168.28},
+  {nps:'8', dn:200, od:219.08},
+  {nps:'10', dn:250, od:273.05},
+  {nps:'12', dn:300, od:323.85},
+  {nps:'14', dn:350, od:355.60},
+  {nps:'16', dn:400, od:406.40},
+  {nps:'18', dn:450, od:457.20},
+  {nps:'20', dn:500, od:508.00},
+  {nps:'24', dn:600, od:609.60},
+];
+
+/* ==================== MAIN TABS ==================== */
+document.querySelectorAll('#mainTabs button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('#mainTabs button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-'+btn.dataset.panel).classList.add('active');
+  });
+});
+
+/* ==================== UNIT CONVERTER ==================== */
+let activeUnit = 'heat';
+
+function buildUnitTabs(){
+  const nav = document.getElementById('unitTabs');
+  nav.innerHTML = '';
+  const orderedKeys = ['heat','steam','pressure','volume','vflow','mflow','temp','length','area','mass','velocity','hardness','energy','enthalpy','density','heatx','tds','cv','pipe'];
+  orderedKeys.forEach(k=>{
+    const u = UNITS[k];
+    const b = document.createElement('button');
+    b.textContent = u.title;
+    b.dataset.key = k;
+    if(k===activeUnit) b.classList.add('active');
+    b.addEventListener('click',()=>{
+      activeUnit = k;
+      document.querySelectorAll('#unitTabs button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      loadUnit();
+    });
+    nav.appendChild(b);
+  });
+}
+
+function loadUnit(){
+  const u = UNITS[activeUnit];
+  document.getElementById('unitTitle').textContent = u.title;
+  document.getElementById('unitHint').textContent = u.hint || '';
+
+  // از لیست واحدها
+  const fromSel = document.getElementById('uFrom');
+  fromSel.innerHTML = '';
+  Object.keys(u.units).forEach(k=>{
+    const o = document.createElement('option');
+    o.value = k;
+    o.textContent = u.units[k].label;
+    fromSel.appendChild(o);
+  });
+
+  // info box
+  const ib = document.getElementById('unitInfo');
+  if(activeUnit==='pipe'){
+    ib.style.display = 'block';
+    ib.innerHTML = `<b>نکته مهم درباره «بوشن ۲ اینچ»:</b><br>
+      در استاندارد ASME/ANSI، <b>NPS 2" معادل DN 50</b> است و قطر خارجی واقعی آن <b>۶۰.۳۳ میلی‌متر</b> می‌باشد. عدد «۶» که بعضاً گفته می‌شود در واقع به <b>قطر خارجی ۶۰.۳ mm</b> اشاره دارد، نه DN 60. برای نصب اتصالات، همیشه باید قطر خارجی (OD) و ضخامت جداره (Schedule) را با هم بررسی کرد.<br>
+      <b>مثال‌های پرکاربرد:</b> ½" = DN 15 · ¾" = DN 20 · ۱" = DN 25 · ۱¼" = DN 32 · ۱½" = DN 40 · <b>۲" = DN 50</b> · ۲½" = DN 65 · ۳" = DN 80 · ۴" = DN 100.`;
+  } else if(activeUnit==='tds'){
+    ib.style.display = 'block';
+    ib.innerHTML = `<b>رابطه تجربی TDS و EC:</b><br>
+      برای آب‌های طبیعی، <b>۱ µS/cm ≈ ۰.۵ تا ۰.۷ ppm TDS</b> (میانگین ۰.۶). این نسبت بسته به نوع یون غالب (NaCl، CaCO₃، ...) تغییر می‌کند. برای آب دیگ، معمولاً ضریب ۰.۵ تا ۰.۵۵ اعمال می‌شود.`;
+  } else if(activeUnit==='cv'){
+    ib.style.display = 'block';
+    ib.innerHTML = `<b>فرمول تبدیل:</b><br>
+      Cv = 1.156 × Kv &nbsp;|&nbsp; Kv = 0.865 × Cv<br>
+      استفاده از ضریب اشتباه (مثلاً ۱.۰ یا ۱.۲) باعث خطای ۱۵٪ در سایزینگ شیر می‌شود.`;
+  } else {
+    ib.style.display = 'none';
+  }
+
+  renderUnit();
+}
+
+function convertTempValue(v, from, to){
+  let c;
+  if(from==='C') c = v;
+  else if(from==='F') c = (v-32)*5/9;
+  else c = v - 273.15;
+  if(to==='C') return c;
+  if(to==='F') return c*9/5+32;
+  return c + 273.15;
+}
+
+function renderUnit(){
+  const u = UNITS[activeUnit];
+  const v = n(document.getElementById('uVal').value);
+  const from = document.getElementById('uFrom').value;
+  if(!from) return;
+
+  const grid = document.getElementById('uGrid');
+
+  // ---- TEMPERATURE ----
+  if(u.special === 'temp'){
+    const c = convertTempValue(v, from, 'C');
+    const f = convertTempValue(v, from, 'F');
+    const k = convertTempValue(v, from, 'K');
+    document.getElementById('uBase').textContent = fmt(c,2);
+    document.getElementById('uBaseLabel').textContent = 'درجه سلسیوس (°C)';
+    grid.innerHTML = `
+      <div class="conv-item"><span class="ck">سلسیوس</span><span class="cv">${fmt(c,2)} °C</span></div>
+      <div class="conv-item"><span class="ck">فارنهایت</span><span class="cv">${fmt(f,2)} °F</span></div>
+      <div class="conv-item"><span class="ck">کلوین</span><span class="cv">${fmt(k,2)} K</span></div>`;
+    return;
+  }
+
+  // ---- PIPE SIZE ----
+  if(u.special === 'pipe'){
+    // ورودی: NPS (رشته) یا DN/OD (عدد)
+    let found = null;
+    if(from === 'NPS'){
+      // جستجو با رشته NPS
+      const inp = document.getElementById('uVal');
+      const raw = (inp.value||'').toString().trim().replace('"','').replace('″','').replace('“','').replace('”','');
+      found = PIPE_TABLE.find(p => p.nps === raw || p.nps === raw.replace('/', '/'));
+      if(!found){
+        // اگر عدد وارد شده، اولین سایز بزرگتر را پیدا کن
+        const num = parseFloat(raw);
+        if(!isNaN(num)) found = PIPE_TABLE.find(p => parseFloat(p.nps)>=num) || PIPE_TABLE[PIPE_TABLE.length-1];
+      }
+    } else {
+      const num = n(document.getElementById('uVal').value);
+      if(from === 'DN'){
+        found = PIPE_TABLE.find(p => p.dn >= num) || PIPE_TABLE[PIPE_TABLE.length-1];
+      } else if(from === 'OD'){
+        found = PIPE_TABLE.find(p => p.od >= num) || PIPE_TABLE[PIPE_TABLE.length-1];
+      }
+    }
+    if(!found){
+      document.getElementById('uBase').textContent = '—';
+      document.getElementById('uBaseLabel').textContent = 'سایز نامعتبر';
+      grid.innerHTML = '';
+      return;
+    }
+    document.getElementById('uBase').textContent = 'DN ' + found.dn;
+    document.getElementById('uBaseLabel').textContent = 'قطر نامی (میلی‌متر)';
+    grid.innerHTML = `
+      <div class="conv-item"><span class="ck">NPS (اینچ)</span><span class="cv">${found.nps}"</span></div>
+      <div class="conv-item"><span class="ck">DN (mm)</span><span class="cv">DN ${found.dn}</span></div>
+      <div class="conv-item"><span class="ck">قطر خارجی واقعی</span><span class="cv">${found.od} mm</span></div>
+    `;
+    return;
+  }
+
+  // ---- STANDARD ----
+  const fromU = u.units[from];
+  const baseVal = v * fromU.factor;
+  const baseU = u.units[u.base];
+  const baseDisplay = baseVal / baseU.factor;
+
+  document.getElementById('uBase').textContent = fmt(baseDisplay,4);
+  document.getElementById('uBaseLabel').textContent = baseU.label;
+
+  let html = '';
+  Object.keys(u.units).forEach(k=>{
+    if(k === u.base) return;
+    const uu = u.units[k];
+    const val = baseVal / uu.factor;
+    html += `<div class="conv-item"><span class="ck">${uu.label}</span><span class="cv">${fmt(val,4)}</span></div>`;
+  });
+  grid.innerHTML = html;
+}
+
+buildUnitTabs();
+loadUnit();
+
+/* ==================== PRACTICAL CALCULATORS ==================== */
+const PRAC = [
+  {key:'flowVol', title:'دبی ↔ حجم مخزن'},
+  {key:'massVol', title:'دبی جرمی ↔ حجمی'},
+  {key:'steamHeat', title:'بخار ↔ حرارت ↔ سوخت'},
+  {key:'boilerCap', title:'ظرفیت دیگ ↔ BHP ↔ TR'},
+  {key:'pressHead', title:'فشار ↔ ستون آب ↔ Head'},
+  {key:'softener', title:'سختی‌گیر (ppm·m³ ↔ grain)'},
+  {key:'fluids', title:'جدول مرجع سیالات'},
+];
+let activePrac = 'flowVol';
+
+function buildPracTabs(){
+  const nav = document.getElementById('pracTabs');
+  nav.innerHTML = '';
+  PRAC.forEach(p=>{
+    const b = document.createElement('button');
+    b.textContent = p.title;
+    if(p.key===activePrac) b.classList.add('active');
+    b.addEventListener('click',()=>{
+      activePrac = p.key;
+      document.querySelectorAll('#pracTabs button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      renderPrac();
+    });
+    nav.appendChild(b);
+  });
+}
+
+/* --- Helper convert flow to GPM, m³/h, L/s, etc. --- */
+const FLOW_TO_M3H = {
+  m3_hr:1, L_min:0.06, L_s:3.6, GPM_US:0.227125, GPM_UK:0.272765, CFM:1.699, m3_s:3600, ft3_hr:0.0283168
+};
+const TIME_TO_HR = {min:1/60, hr:1, s:1/3600};
+
+function renderPrac(){
+  const c = document.getElementById('pracContent');
+  if(activePrac === 'flowVol') c.innerHTML = renderFlowVol();
+  else if(activePrac === 'massVol') c.innerHTML = renderMassVol();
+  else if(activePrac === 'steamHeat') c.innerHTML = renderSteamHeat();
+  else if(activePrac === 'boilerCap') c.innerHTML = renderBoilerCap();
+  else if(activePrac === 'pressHead') c.innerHTML = renderPressHead();
+  else if(activePrac === 'softener') c.innerHTML = renderSoftener();
+  else if(activePrac === 'fluids') c.innerHTML = renderFluids();
+}
+
+/* ============================================================
+   1) دبی ↔ حجم مخزن
+   ============================================================ */
+function renderFlowVol(){
+  return `
+  <div class="card">
+    <span class="badge">Flow ↔ Tank Volume</span>
+    <h2>تبدیل دبی به حجم مخزن (Holding Time)</h2>
+    <p class="hint">مثال: «۵۰۰۰ گالن بر ساعت آب تغذیه، مخزن با ۲۰ دقیقه هولدآپ چند لیتره؟» — این محاسبه دقیقاً همان چیزی است که در طراحی مخازن دی‌اریتور، کندانس و ذخیره کاربرد دارد.</p>
+    <div class="row3">
+      <div class="field"><label>دبی</label><input type="number" id="fv_flow" value="5000" step="any" oninput="calcFlowVol()"></div>
+      <div class="field"><label>واحد دبی</label>
+        <select id="fv_unit" onchange="calcFlowVol()">
+          <option value="m3_hr">m³/hr</option>
+          <option value="L_min">L/min</option>
+          <option value="L_s">L/s</option>
+          <option value="GPM_US" selected>GPM (US)</option>
+          <option value="GPM_UK">GPM (UK)</option>
+          <option value="CFM">CFM</option>
+        </select>
+      </div>
+      <div class="field"><label>زمان هولدآپ</label>
+        <div class="row">
+          <input type="number" id="fv_time" value="20" step="any" oninput="calcFlowVol()">
+          <select id="fv_timeunit" onchange="calcFlowVol()">
+            <option value="min" selected>دقیقه</option>
+            <option value="hr">ساعت</option>
+            <option value="s">ثانیه</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div id="fv_result"></div>
+  </div>`;
+}
+
+function calcFlowVol(){
+  const flow = n(document.getElementById('fv_flow').value);
+  const fu = document.getElementById('fv_unit').value;
+  const t = n(document.getElementById('fv_time').value);
+  const tu = document.getElementById('fv_timeunit').value;
+
+  const flowM3h = flow * FLOW_TO_M3H[fu];
+  const timeHr = t * TIME_TO_HR[tu];
+  const volM3 = flowM3h * timeHr;
+  const volL = volM3 * 1000;
+  const volGal = volL / 3.78541;
+  const volFt3 = volM3 * 35.3147;
+
+  document.getElementById('fv_result').innerHTML = `
+    <div class="result-main"><div class="num">${fmt(volL,1)} <small style="font-size:.6em;">L</small></div><div class="lbl">حجم مخزن لازم</div></div>
+    <div class="conv-grid">
+      <div class="conv-item"><span class="ck">لیتر</span><span class="cv">${fmt(volL,1)} L</span></div>
+      <div class="conv-item"><span class="ck">متر مکعب</span><span class="cv">${fmt(volM3,3)} m³</span></div>
+      <div class="conv-item"><span class="ck">گالن آمریکایی</span><span class="cv">${fmt(volGal,1)} US gal</span></div>
+      <div class="conv-item"><span class="ck">فوت مکعب</span><span class="cv">${fmt(volFt3,2)} ft³</span></div>
+    </div>
+    <div class="info-box">
+      <b>محاسبه:</b> ${fmt(flow,2)} ${fu.replace('_',' ')} × ${fmt(t,2)} ${tu==='min'?'دقیقه':tu==='hr'?'ساعت':'ثانیه'} = <b>${fmt(volL,1)} لیتر</b><br>
+      <b>توصیه:</b> در طراحی واقعی، ۲۰٪ فضای آزاد (Ullage) و ضریب اطمینان به حجم اضافه کنید.
+    </div>`;
+}
+
+/* ============================================================
+   2) دبی جرمی ↔ حجمی
+   ============================================================ */
+const FLUIDS = [
+  {key:'water20', name:'آب (۲۰°C)', rho:998},
+  {key:'water90', name:'آب داغ (۹۰°C)', rho:965},
+  {key:'water150', name:'آب (۱۵۰°C، اشباع)', rho:917},
+  {key:'therminol55', name:'روغن داغ Therminol 55 (۲۵۰°C)', rho:822},
+  {key:'therminol66', name:'روغن داغ Therminol 66 (۳۰۰°C)', rho:830},
+  {key:'diesel', name:'گازوئیل (۱۵°C)', rho:830},
+  {key:'mazut', name:'مازوت', rho:950},
+  {key:'glycol', name:'ضد یخ (Ethylene Glycol 50%)', rho:1070},
+  {key:'air', name:'هوا (۲۰°C)', rho:1.205},
+  {key:'custom', name:'سفارشی (چگالی دلخواه)', rho:1000},
+];
+
+function renderMassVol(){
+  return `
+  <div class="card">
+    <span class="badge">Mass Flow ↔ Volume Flow</span>
+    <h2>تبدیل دبی جرمی به دبی حجمی (و برعکس)</h2>
+    <p class="hint">برای تبدیل kg/hr به m³/hr (یا عکس آن) نیاز به چگالی سیال است. جدول چگالی سیالات رایج در پایین ارائه شده است.</p>
+    <div class="row3">
+      <div class="field"><label>مقدار</label><input type="number" id="mv_val" value="10" step="any" oninput="calcMassVol()"></div>
+      <div class="field"><label>نوع کمیت</label>
+        <select id="mv_type" onchange="calcMassVol()">
+          <option value="mass" selected>دبی جرمی (kg/hr)</option>
+          <option value="vol">دبی حجمی (m³/hr)</option>
+        </select>
+      </div>
+      <div class="field"><label>سیال</label>
+        <select id="mv_fluid" onchange="calcMassVol()">
+          ${FLUIDS.map(f=>`<option value="${f.key}" ${f.key==='water20'?'selected':''}>${f.name}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="field" id="mv_custom_wrap" style="display:none;">
+      <label>چگالی سفارشی (kg/m³)</label>
+      <input type="number" id="mv_rho" value="1000" step="any" oninput="calcMassVol()">
+    </div>
+    <div id="mv_result"></div>
+  </div>`;
+}
+
+function getFluidDensity(){
+  const f = document.getElementById('mv_fluid').value;
+  if(f === 'custom') return n(document.getElementById('mv_rho').value);
+  return FLUIDS.find(x=>x.key===f).rho;
+}
+function calcMassVol(){
+  const f = document.getElementById('mv_fluid').value;
+  document.getElementById('mv_custom_wrap').style.display = (f==='custom')?'block':'none';
+  const v = n(document.getElementById('mv_val').value);
+  const type = document.getElementById('mv_type').value;
+  const rho = getFluidDensity();
+  if(rho<=0){ document.getElementById('mv_result').innerHTML='<div class="warn">چگالی معتبر وارد کنید.</div>'; return; }
+
+  let massKgH, volM3H;
+  if(type === 'mass'){ massKgH = v; volM3H = v / rho; }
+  else { volM3H = v; massKgH = v * rho; }
+
+  const volLh = volM3H * 1000;
+  const volGPM = volM3H / 0.227125;
+  const massLbH = massKgH / 0.453592;
+  const massTonH = massKgH / 1000;
+
+  document.getElementById('mv_result').innerHTML = `
+    <div class="result-main">
+      <div class="num">${fmt(massKgH,2)} <small style="font-size:.55em;">kg/hr</small></div>
+      <div class="lbl">دبی جرمی &nbsp;·&nbsp; ${fmt(volM3H,4)} m³/hr دبی حجمی</div>
+    </div>
+    <div class="conv-grid">
+      <div class="conv-item"><span class="ck">دبی جرمی</span><span class="cv">${fmt(massKgH,2)} kg/hr</span></div>
+      <div class="conv-item"><span class="ck">دبی جرمی</span><span class="cv">${fmt(massLbH,2)} lb/hr</span></div>
+      <div class="conv-item"><span class="ck">دبی جرمی</span><span class="cv">${fmt(massTonH,4)} ton/hr</span></div>
+      <div class="conv-item"><span class="ck">دبی حجمی</span><span class="cv">${fmt(volM3H,4)} m³/hr</span></div>
+      <div class="conv-item"><span class="ck">دبی حجمی</span><span class="cv">${fmt(volLh,2)} L/hr</span></div>
+      <div class="conv-item"><span class="ck">دبی حجمی</span><span class="cv">${fmt(volGPM,3)} GPM</span></div>
+    </div>
+    <div class="info-box">
+      <b>چگالی استفاده‌شده:</b> ${fmt(rho,1)} kg/m³<br>
+      <b>فرمول:</b> Q<sub>حجمی</sub> = Q<sub>جرمی</sub> ÷ ρ &nbsp;·&nbsp; Q<sub>جرمی</sub> = Q<sub>حجمی</sub> × ρ
+    </div>`;
+}
+
+/* ============================================================
+   3) بخار ↔ حرارت ↔ سوخت
+   ============================================================ */
+const STEAM_SAT = [
+  {p:0.3, t:69.1, hf:289.3, hfg:2336.1, vg:5.229},
+  {p:0.5, t:81.3, hf:340.6, hfg:2305.4, vg:3.24},
+  {p:1.0, t:99.6, hf:417.5, hfg:2258.0, vg:1.694},
+  {p:2.0, t:120.2, hf:504.7, hfg:2201.9, vg:0.8857},
+  {p:3.0, t:133.5, hf:561.4, hfg:2163.8, vg:0.6058},
+  {p:4.0, t:143.6, hf:604.7, hfg:2133.8, vg:0.4625},
+  {p:5.0, t:151.8, hf:640.1, hfg:2108.0, vg:0.3749},
+  {p:6.0, t:158.8, hf:670.4, hfg:2085.0, vg:0.3157},
+  {p:7.0, t:165.0, hf:697.1, hfg:2064.0, vg:0.2729},
+  {p:8.0, t:170.4, hf:720.9, hfg:2046.5, vg:0.2404},
+  {p:10.0, t:179.9, hf:762.6, hfg:2013.6, vg:0.1943},
+  {p:12.0, t:187.9, hf:798.3, hfg:1984.3, vg:0.1632},
+  {p:16.0, t:201.4, hf:858.6, hfg:1933.2, vg:0.1238},
+  {p:20.0, t:212.4, hf:908.6, hfg:1888.6, vg:0.0995},
+];
+function interpSteam(pAbs){
+  if(pAbs<=STEAM_SAT[0].p) return STEAM_SAT[0];
+  if(pAbs>=STEAM_SAT[STEAM_SAT.length-1].p) return STEAM_SAT[STEAM_SAT.length-1];
+  for(let i=0;i<STEAM_SAT.length-1;i++){
+    const a=STEAM_SAT[i], b=STEAM_SAT[i+1];
+    if(pAbs>=a.p && pAbs<=b.p){
+      const r=(pAbs-a.p)/(b.p-a.p);
+      return {p:pAbs, t:a.t+r*(b.t-a.t), hf:a.hf+r*(b.hf-a.hf), hfg:a.hfg+r*(b.hfg-a.hfg), vg:a.vg+r*(b.vg-a.vg)};
+    }
+  }
+  return STEAM_SAT[STEAM_SAT.length-1];
+}
+const FUELS_DATA = {
+  gas:    {name:'گاز طبیعی', HHV:8500, unit:'m³/hr'},
+  diesel: {name:'گازوئیل',   LHV:10200, unit:'kg/hr'},
+  mazut:  {name:'مازوت',     LHV:9700, unit:'kg/hr'},
+};
+
+function renderSteamHeat(){
+  return `
+  <div class="card">
+    <span class="badge">Steam ↔ Heat ↔ Fuel</span>
+    <h2>تبدیل ظرفیت بخار به بار حرارتی و مصرف سوخت</h2>
+    <p class="hint">مثال: «۳۰۰۰ kg/hr بخار در ۱۰ bar، چند kW بار حرارتی است؟ مصرف گاز چقدر می‌شود؟»</p>
+    <div class="row3">
+      <div class="field"><label>دبی بخار</label><input type="number" id="sh_flow" value="3000" step="any" oninput="calcSteamHeat()"></div>
+      <div class="field"><label>فشار کاری</label><input type="number" id="sh_p" value="10" step="any" oninput="calcSteamHeat()"><span class="unit">bar (gauge)</span></div>
+      <div class="field"><label>راندمان دیگ</label><input type="number" id="sh_eff" value="88" step="any" oninput="calcSteamHeat()"><span class="unit">٪</span></div>
+    </div>
+    <div class="row3">
+      <div class="field"><label>دمای آب تغذیه</label><input type="number" id="sh_tf" value="105" step="any" oninput="calcSteamHeat()"><span class="unit">°C</span></div>
+      <div class="field"><label>کیفیت بخار (خشکی)</label><input type="number" id="sh_x" value="97" step="any" oninput="calcSteamHeat()"><span class="unit">٪</span></div>
+      <div class="field"><label>سوخت</label>
+        <select id="sh_fuel" onchange="calcSteamHeat()">
+          <option value="gas" selected>گاز طبیعی</option>
+          <option value="diesel">گازوئیل</option>
+          <option value="mazut">مازوت</option>
+        </select>
+      </div>
+    </div>
+    <div id="sh_result"></div>
+  </div>`;
+}
+
+function calcSteamHeat(){
+  const flow = n(document.getElementById('sh_flow').value);
+  const p = n(document.getElementById('sh_p').value);
+  const eff = n(document.getElementById('sh_eff').value)/100;
+  const tf = n(document.getElementById('sh_tf').value);
+  const x = n(document.getElementById('sh_x').value)/100;
+  const fuelKey = document.getElementById('sh_fuel').value;
+
+  if(flow<=0 || p<=0){ document.getElementById('sh_result').innerHTML=''; return; }
+
+  const pAbs = p + 1.013;
+  const sp = interpSteam(pAbs);
+  const hSteam = sp.hf + sp.hfg * x;   // kJ/kg
+  const hFeed = tf * 4.187;             // kJ/kg
+  const dH = hSteam - hFeed;
+  const qKW = flow * dH / 3600;         // kW
+  const qKcal = qKW * 860.421;
+  const qInput = qKcal / eff;           // kcal/hr ورودی
+
+  const f = FUELS_DATA[fuelKey];
+  let fuelRate, fuelUnit;
+  if(fuelKey === 'gas'){ fuelRate = qInput / f.HHV; fuelUnit = 'm³/hr'; }
+  else { fuelRate = qInput / f.LHV; fuelUnit = 'kg/hr'; }
+
+  document.getElementById('sh_result').innerHTML = `
+    <div class="result-main">
+      <div class="num">${fmt(qKW,1)} <small style="font-size:.55em;">kW</small></div>
+      <div class="lbl">بار حرارتی مفید (${fmt(qKcal,0)} kcal/hr)</div>
+    </div>
+    <div class="conv-grid">
+      <div class="conv-item"><span class="ck">بار حرارتی</span><span class="cv">${fmt(qKcal,0)} kcal/hr</span></div>
+      <div class="conv-item"><span class="ck">بار حرارتی</span><span class="cv">${fmt(qKW,2)} kW</span></div>
+      <div class="conv-item"><span class="ck">بار حرارتی</span><span class="cv">${fmt(qKcal/8434.5,3)} BHP</span></div>
+      <div class="conv-item"><span class="ck">بار ورودی مشعل</span><span class="cv">${fmt(qInput,0)} kcal/hr</span></div>
+      <div class="conv-item"><span class="ck">مصرف سوخت — ${f.name}</span><span class="cv">${fmt(fuelRate,2)} ${fuelUnit}</span></div>
+      <div class="conv-item"><span class="ck">دمای اشباع در ${p} bar</span><span class="cv">${fmt(sp.t,1)} °C</span></div>
+    </div>
+    <div class="info-box">
+      <b>محاسبه:</b><br>
+      h<sub>بخار</sub> (در ${p} bar با کیفیت ${(x*100).toFixed(0)}٪) = ${fmt(hSteam,1)} kJ/kg<br>
+      h<sub>آب تغذیه</sub> (در ${tf}°C) = ${fmt(hFeed,1)} kJ/kg<br>
+      Δh = ${fmt(dH,1)} kJ/kg &nbsp;|&nbsp; Q = ${fmt(flow,0)} × ${fmt(dH,1)} / 3600 = <b>${fmt(qKW,2)} kW</b><br>
+      بار ورودی مشعل = ${fmt(qKcal,0)} ÷ ${(eff*100).toFixed(0)}٪ = <b>${fmt(qInput,0)} kcal/hr</b>
+    </div>`;
+}
+
+/* ============================================================
+   4) ظرفیت دیگ ↔ BHP ↔ TR
+   ============================================================ */
+function renderBoilerCap(){
+  return `
+  <div class="card">
+    <span class="badge">Boiler Capacity Converter</span>
+    <h2>تبدیل واحدهای ظرفیت دیگ بخار و آبگرم</h2>
+    <p class="hint">تبدیل هم‌زمان kW، BHP، kg/hr بخار، kcal/hr، BTU/hr، تن تبرید و HP.</p>
+    <div class="row">
+      <div class="field"><label>مقدار</label><input type="number" id="bc_val" value="1000" step="any" oninput="calcBoilerCap()"></div>
+      <div class="field"><label>واحد مبدأ</label>
+        <select id="bc_unit" onchange="calcBoilerCap()">
+          <option value="kW">kW</option>
+          <option value="kcal_hr" selected>kcal/hr</option>
+          <option value="MW">MW</option>
+          <option value="BHP">BHP (Boiler HP)</option>
+          <option value="kg_hr_steam">kg/hr بخار اشباع</option>
+          <option value="BTU_hr">BTU/hr</option>
+          <option value="TR">تن تبرید (TR)</option>
+          <option value="HP">HP (اسب بخار)</option>
+        </select>
+      </div>
+    </div>
+    <div id="bc_result"></div>
+  </div>`;
+}
+
+function calcBoilerCap(){
+  const v = n(document.getElementById('bc_val').value);
+  const u = document.getElementById('bc_unit').value;
+
+  // تبدیل همه به kcal/hr پایه
+  let kcal;
+  if(u==='kW') kcal = v * 860.421;
+  else if(u==='kcal_hr') kcal = v;
+  else if(u==='MW') kcal = v * 860421;
+  else if(u==='BHP') kcal = v * 8434.5;
+  else if(u==='kg_hr_steam') kcal = v * 539;  // گرمای نهان تقریبی
+  else if(u==='BTU_hr') kcal = v * 0.252;
+  else if(u==='TR') kcal = v * 3024.84;
+  else if(u==='HP') kcal = v * 641.19;
+
+  document.getElementById('bc_result').innerHTML = `
+    <div class="result-main">
+      <div class="num">${fmt(kcal,0)} <small style="font-size:.55em;">kcal/hr</small></div>
+      <div class="lbl">معادل اصلی</div>
+    </div>
+    <div class="conv-grid">
+      <div class="conv-item"><span class="ck">کیلووات</span><span class="cv">${fmt(kcal/860.421,2)} kW</span></div>
+      <div class="conv-item"><span class="ck">مگاوات</span><span class="cv">${fmt(kcal/860421,4)} MW</span></div>
+      <div class="conv-item"><span class="ck">BHP</span><span class="cv">${fmt(kcal/8434.5,3)} BHP</span></div>
+      <div class="conv-item"><span class="ck">بخار اشباع (≈)</span><span class="cv">${fmt(kcal/539,1)} kg/hr</span></div>
+      <div class="conv-item"><span class="ck">BTU/hr</span><span class="cv">${fmt(kcal/0.252,0)} BTU/hr</span></div>
+      <div class="conv-item"><span class="ck">تن تبرید</span><span class="cv">${fmt(kcal/3024.84,3)} TR</span></div>
+      <div class="conv-item"><span class="ck">اسب بخار مکانیکی</span><span class="cv">${fmt(kcal/641.19,3)} HP</span></div>
+      <div class="conv-item"><span class="ck">کیلوکالری</span><span class="cv">${fmt(kcal,0)} kcal/hr</span></div>
+    </div>
+    <div class="info-box">
+      <b>نکته:</b> تبدیل kg/hr بخار به kcal/hr در این جدول با فرض گرمای نهان تقریبی <b>۵۳۹ kcal/kg</b> انجام شده است. برای محاسبه دقیق‌تر از تب «بخار ↔ حرارت ↔ سوخت» استفاده کنید.
+    </div>`;
+}
+
+/* ============================================================
+   5) فشار ↔ ستون آب ↔ Head پمپ
+   ============================================================ */
+function renderPressHead(){
+  return `
+  <div class="card">
+    <span class="badge">Pressure ↔ Water Column ↔ Pump Head</span>
+    <h2>تبدیل فشار به ستون آب و Head پمپ</h2>
+    <p class="hint">مهندسان مکانیک اغلب Head پمپ را با متر ستون آب (m H₂O) بیان می‌کنند. این ابزار تبدیل بین فشار (bar, psi, kPa) و ستون آب (m, mm) و Head را فراهم می‌کند.</p>
+    <div class="row">
+      <div class="field"><label>مقدار</label><input type="number" id="ph_val" value="10" step="any" oninput="calcPressHead()"></div>
+      <div class="field"><label>واحد مبدأ</label>
+        <select id="ph_unit" onchange="calcPressHead()">
+          <option value="bar" selected>bar</option>
+          <option value="psi">psi</option>
+          <option value="kPa">kPa</option>
+          <option value="MPa">MPa</option>
+          <option value="mH2O">m H₂O</option>
+          <option value="mmH2O">mm H₂O</option>
+          <option value="kg_cm2">kg/cm²</option>
+          <option value="atm">atm</option>
+        </select>
+      </div>
+    </div>
+    <div id="ph_result"></div>
+  </div>`;
+}
+
+function calcPressHead(){
+  const v = n(document.getElementById('ph_val').value);
+  const u = document.getElementById('ph_unit').value;
+  // به m H2O پایه
+  const to_mH2O = {bar:10.1972, psi:0.70307, kPa:0.101972, MPa:101.972, mH2O:1, mmH2O:0.001, kg_cm2:10, atm:10.3323};
+  const mH2O = v * to_mH2O[u];
+  const bar = mH2O / 10.1972;
+  const psi = bar / 0.0689476;
+  const kPa = bar * 100;
+  const mmH2O = mH2O * 1000;
+
+  document.getElementById('ph_result').innerHTML = `
+    <div class="result-main">
+      <div class="num">${fmt(mH2O,3)} <small style="font-size:.55em;">m H₂O</small></div>
+      <div class="lbl">ستون آب (معادل Head پمپ)</div>
+    </div>
+    <div class="conv-grid">
+      <div class="conv-item"><span class="ck">ستون آب (متر)</span><span class="cv">${fmt(mH2O,3)} m</span></div>
+      <div class="conv-item"><span class="ck">ستون آب (میلی‌متر)</span><span class="cv">${fmt(mmH2O,1)} mm</span></div>
+      <div class="conv-item"><span class="ck">بار</span><span class="cv">${fmt(bar,4)} bar</span></div>
+      <div class="conv-item"><span class="ck">psi</span><span class="cv">${fmt(psi,3)} psi</span></div>
+      <div class="conv-item"><span class="ck">کیلوپاسکال</span><span class="cv">${fmt(kPa,3)} kPa</span></div>
+      <div class="conv-item"><span class="ck">kg/cm²</span><span class="cv">${fmt(mH2O/10,4)} kg/cm²</span></div>
+    </div>
+    <div class="info-box">
+      <b>رابطه:</b> ۱ bar ≈ ۱۰.۲ متر ستون آب &nbsp;|&nbsp; ۱ psi ≈ ۰.۷۰۳ متر ستون آب<br>
+      <b>مثال کاربردی:</b> پمپ با Head ۵۰ متر ≈ ۴.۹ bar فشار
+    </div>`;
+}
+
+/* ============================================================
+   6) سختی‌گیر: ppm·m³ ↔ grain
+   ============================================================ */
+function renderSoftener(){
+  return `
+  <div class="card">
+    <span class="badge">Water Softener Design</span>
+    <h2>محاسبه ظرفیت سختی‌گیر (ppm·m³ ↔ grain)</h2>
+    <p class="hint">مثال: «آب ۳۰۰ ppm، دبی ۵ m³/hr، دوره احیا ۱ روز — سختی‌گیر چند گرین و چند لیتر رزین می‌خواهد؟»</p>
+    <div class="row3">
+      <div class="field"><label>سختی آب</label><input type="number" id="sf_hard" value="300" step="any" oninput="calcSoftener()"><span class="unit">ppm CaCO₃</span></div>
+      <div class="field"><label>دبی</label><input type="number" id="sf_flow" value="5" step="any" oninput="calcSoftener()"><span class="unit">m³/hr</span></div>
+      <div class="field"><label>دوره احیا</label><input type="number" id="sf_days" value="1" step="any" oninput="calcSoftener()"><span class="unit">روز</span></div>
+    </div>
+    <div class="row3">
+      <div class="field"><label>ساعت کار در روز</label><input type="number" id="sf_hours" value="24" step="any" oninput="calcSoftener()"></div>
+      <div class="field"><label>ظرفیت ویژه رزین</label><input type="number" id="sf_cap" value="30000" step="any" oninput="calcSoftener()"><span class="unit">grain/ft³</span></div>
+      <div class="field"><label>دوز نمک</label><input type="number" id="sf_salt" value="15" step="any" oninput="calcSoftener()"><span class="unit">lb/ft³</span></div>
+    </div>
+    <div id="sf_result"></div>
+  </div>`;
+}
+
+function calcSoftener(){
+  const hard = n(document.getElementById('sf_hard').value);
+  const flow = n(document.getElementById('sf_flow').value);
+  const days = n(document.getElementById('sf_days').value);
+  const hours = n(document.getElementById('sf_hours').value);
+  const cap = n(document.getElementById('sf_cap').value);
+  const saltDose = n(document.getElementById('sf_salt').value);
+
+  if(hard<=0||flow<=0||days<=0||cap<=0){ document.getElementById('sf_result').innerHTML=''; return; }
+
+  const volPerCycle = flow * hours * days;             // m³
+  const ppmM3 = hard * volPerCycle;                    // ppm·m³
+  const grain_US = ppmM3 * 1000 / 17.12;               // grain (US)
+  const grainWithMargin = grain_US * 1.3;
+  const resinFt3 = grainWithMargin / cap;
+  const resinL = resinFt3 * 28.317;
+  const saltKg = resinFt3 * saltDose * 0.453592;
+
+  document.getElementById('sf_result').innerHTML = `
+    <div class="result-main">
+      <div class="num">${fmt(grainWithMargin,0)} <small style="font-size:.5em;">grain</small></div>
+      <div class="lbl">ظرفیت رزین لازم (با ۳۰٪ حاشیه)</div>
+    </div>
+    <div class="conv-grid">
+      <div class="conv-item"><span class="ck">حجم آب در هر دوره</span><span class="cv">${fmt(volPerCycle,2)} m³</span></div>
+      <div class="conv-item"><span class="ck">ppm·m³</span><span class="cv">${fmt(ppmM3,0)} ppm·m³</span></div>
+      <div class="conv-item"><span class="ck">ظرفیت رزین (خالص)</span><span class="cv">${fmt(grain_US,0)} grain</span></div>
+      <div class="conv-item"><span class="ck">حجم رزین</span><span class="cv">${fmt(resinFt3,2)} ft³</span></div>
+      <div class="conv-item"><span class="ck">حجم رزین</span><span class="cv">${fmt(resinL,1)} L</span></div>
+      <div class="conv-item"><span class="ck">نمک هر احیا</span><span class="cv">${fmt(saltKg,2)} kg</span></div>
+    </div>
+    <div class="info-box">
+      <b>محاسبه:</b><br>
+      ۱) حجم آب در هر دوره = ${flow} m³/hr × ${hours} hr × ${days} day = <b>${fmt(volPerCycle,2)} m³</b><br>
+      ۲) ppm·m³ = ${hard} ppm × ${fmt(volPerCycle,2)} m³ = <b>${fmt(ppmM3,0)}</b><br>
+      ۳) grain = ppm·m³ × ۱۰۰۰ ÷ ۱۷.۱۲ = <b>${fmt(grain_US,0)}</b><br>
+      ۴) حجم رزین = ${fmt(grainWithMargin,0)} ÷ ${cap} = <b>${fmt(resinFt3,2)} ft³</b><br>
+      ۵) نمک = ${fmt(resinFt3,2)} ft³ × ${saltDose} lb/ft³ × ۰.۴۵۳۶ = <b>${fmt(saltKg,2)} kg</b><br>
+      <b>توصیه:</b> برای انتخاب مدل سختی‌گیر، عدد رزین به‌دست‌آمده را به اولین مدل بزرگ‌تر کاتالوگ گرد کنید.
+    </div>`;
+}
+
+/* ============================================================
+   7) جدول مرجع سیالات
+   ============================================================ */
+function renderFluids(){
+  const rows = [
+    ['آب (۲۰°C)', '998', '4.18', '—', '—'],
+    ['آب (۵۰°C)', '988', '4.18', '—', '—'],
+    ['آب (۹۰°C)', '965', '4.20', '—', '—'],
+    ['آب اشباع (۱۰ bar)', '888', '4.40', '—', '—'],
+    ['بخار اشباع (۱ bar)', '0.59', '2.08', '2258', '1.694'],
+    ['بخار اشباع (۱۰ bar)', '5.15', '3.10', '2014', '0.194'],
+    ['روغن داغ Therminol 55 (۲۵۰°C)', '822', '2.30', '—', '—'],
+    ['روغن داغ Therminol 66 (۳۰۰°C)', '830', '2.40', '—', '—'],
+    ['گازوئیل', '830', '2.10', '—', '—'],
+    ['مازوت', '950', '1.90', '—', '—'],
+    ['هوا (۲۰°C، ۱ atm)', '1.205', '1.005', '—', '—'],
+    ['اتیلن گلیکول ۵۰٪', '1070', '3.30', '—', '—'],
+    ['گاز طبیعی (۱۵°C)', '0.72', '2.20', '—', '—'],
+  ];
+  return `
+  <div class="card">
+    <span class="badge">Fluid Reference</span>
+    <h2>جدول مرجع خواص سیالات</h2>
+    <p class="hint">چگالی، گرمای ویژه، گرمای نهان تبخیر و حجم مخصوص سیالات پرکاربرد در صنعت دیگ، مخازن و تاسیسات.</p>
+    <div style="overflow-x:auto;">
+    <table class="std">
+      <tr><th>سیال</th><th>چگالی (kg/m³)</th><th>Cp (kJ/kg·K)</th><th>h<sub>fg</sub> (kJ/kg)</th><th>v (m³/kg)</th></tr>
+      ${rows.map(r=>`<tr><td style="text-align:right;">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('')}
+    </table>
+    </div>
+    <div class="info-box">
+      <b>منابع:</b> جداول بخار اشباع (IAPWS-97)، داده‌های فنی Therminol، API 42 برای سوخت‌ها، ASHRAE Handbook.<br>
+      <b>نکته:</b> چگالی روغن داغ و مازوت بسته به دما و گرید تغییر می‌کند. برای طراحی دقیق، به دیتاشیت تولیدکننده مراجعه کنید.
+    </div>
+  </div>`;
+}
+
+buildPracTabs();
+renderPrac();
+
+/* ==================== SERVICE WORKER ==================== */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => console.log('✓ SW registered:', reg.scope))
+      .catch(err => console.warn('✗ SW failed:', err));
+  });
+}
+</script>
+</body>
+</html>
