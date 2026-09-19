@@ -1967,4 +1967,92 @@ const FONT_GROUPS = [
   { key:'convCk', label:'عنوان در آیتم تبدیل', var:'--fs-conv-ck', def:0.76, min:0.55, max:1.2, step:0.02, sample:'کیلووات' },
   { key:'convCv', label:'مقدار در آیتم تبدیل', var:'--fs-conv-cv', def:1.00, min:0.7, max:1.5, step:0.02, sample:'۸۶۰.۴۲' },
   { key:'info', label:'جعبه اطلاعات', var:'--fs-info', def:0.90, min:0.65, max:1.35, step:0.02, sample:'محاسبه: ۵۰۰۰ × ...' },
-  { key:'table', label:'جدول‌ها', var:'--fs-table', def
+  { key:'table', label:'جدول‌ها', var:'--fs-table', def:0.90, min:0.65, max:1.3, step:0.02, sample:'چگالی | Cp | ...' },
+  { key:'badge', label:'برچسب بالای کارت', var:'--fs-badge', def:0.72, min:0.55, max:1.2, step:0.02, sample:'FLOW ↔ TANK VOLUME' },
+];
+const FONT_STORAGE_KEY = 'cma_font_settings_v1';
+
+function loadFontSettings(){
+  try{ const raw = localStorage.getItem(FONT_STORAGE_KEY); if(!raw) return {}; return JSON.parse(raw) || {}; }
+  catch(e){ return {}; }
+}
+function saveFontSettings(obj){
+  try{ localStorage.setItem(FONT_STORAGE_KEY, JSON.stringify(obj)); }catch(e){}
+}
+function applyFontSetting(key, value){
+  const g = FONT_GROUPS.find(x => x.key === key);
+  if(!g) return;
+  document.documentElement.style.setProperty(g.var, value + 'rem');
+}
+function applyAllFontSettings(){
+  const saved = loadFontSettings();
+  FONT_GROUPS.forEach(g => {
+    const v = (saved[g.key] !== undefined) ? saved[g.key] : g.def;
+    applyFontSetting(g.key, v);
+  });
+}
+function buildFontPanel(){
+  const container = document.getElementById('fontSliders');
+  const saved = loadFontSettings();
+  container.innerHTML = FONT_GROUPS.map(g => {
+    const val = (saved[g.key] !== undefined) ? saved[g.key] : g.def;
+    return `
+      <div class="font-slider-row">
+        <div class="fsr-head">
+          <span class="fsr-label">${g.label}</span>
+          <span class="fsr-value" id="fsv_${g.key}">${val.toFixed(2)}rem</span>
+        </div>
+        <input type="range" id="fsr_${g.key}" min="${g.min}" max="${g.max}" step="${g.step}" value="${val}" data-key="${g.key}">
+        <div class="fsr-sample" id="fss_${g.key}" style="font-size:${val}rem;">${g.sample}</div>
+      </div>`;
+  }).join('');
+  container.querySelectorAll('input[type=range]').forEach(slider => {
+    slider.addEventListener('input', (e) => {
+      const key = e.target.dataset.key;
+      const val = parseFloat(e.target.value);
+      applyFontSetting(key, val);
+      document.getElementById('fsv_' + key).textContent = val.toFixed(2) + 'rem';
+      document.getElementById('fss_' + key).style.fontSize = val + 'rem';
+      const saved = loadFontSettings();
+      saved[key] = val;
+      saveFontSettings(saved);
+    });
+  });
+}
+function resetAllFonts(){
+  FONT_GROUPS.forEach(g => applyFontSetting(g.key, g.def));
+  saveFontSettings({});
+  buildFontPanel();
+  toast('اندازه فونت‌ها بازنشانی شد');
+}
+
+applyAllFontSettings();
+buildFontPanel();
+
+const fontPanel = document.getElementById('fontPanel');
+const fontOverlay = document.getElementById('fontOverlay');
+document.getElementById('fontBtn').addEventListener('click', () => {
+  fontPanel.classList.add('open');
+  fontOverlay.classList.add('show');
+  fontPanel.setAttribute('aria-hidden','false');
+});
+function closeFontPanel(){
+  fontPanel.classList.remove('open');
+  fontOverlay.classList.remove('show');
+  fontPanel.setAttribute('aria-hidden','true');
+}
+document.getElementById('fontClose').addEventListener('click', closeFontPanel);
+fontOverlay.addEventListener('click', closeFontPanel);
+document.getElementById('fontReset').addEventListener('click', resetAllFonts);
+
+/* ==================== SERVICE WORKER ==================== */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => console.log('✓ SW registered:', reg.scope))
+      .catch(err => console.warn('✗ SW failed:', err));
+  });
+}
+</script>
+</body>
+</html>
