@@ -197,7 +197,8 @@
   .field{margin-bottom:14px;}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
-  @media(max-width:520px){.row3{grid-template-columns:1fr;}}
+  .row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;}
+  @media(max-width:520px){.row3,.row4{grid-template-columns:1fr;}}
   input[type=number],input[type=text],select{
     width:100%;padding:12px 14px;border:1.5px solid var(--line-2);border-radius:10px;
     font-family:inherit;font-size:var(--fs-input);background:#FFF;color:var(--text);
@@ -325,6 +326,55 @@
     color:#fff;border-color:transparent;
     box-shadow:0 3px 10px rgba(10,156,184,.3);
   }
+  /* استایل جدول ورودی چند ردیفی */
+  .multi-row-table{
+    width:100%;border-collapse:collapse;font-size:.85rem;
+    background:#FFF;border-radius:10px;overflow:hidden;
+    box-shadow:var(--shadow-sm);margin-top:10px;
+  }
+  .multi-row-table th{
+    background:linear-gradient(135deg,var(--c-violet),var(--c-indigo));
+    color:#fff;font-weight:800;padding:8px 6px;font-size:.76rem;
+  }
+  .multi-row-table td{border:1px solid var(--line);padding:4px;text-align:center;}
+  .multi-row-table input{
+    width:100%;padding:7px 6px;border:1px solid var(--line-2);
+    border-radius:6px;font-family:inherit;font-size:.85rem;
+    font-weight:700;text-align:center;font-variant-numeric:tabular-nums;
+    background:#FAFCFE;color:var(--text);
+  }
+  .multi-row-table input:focus{
+    outline:none;border-color:var(--c-cyan);
+    box-shadow:0 0 0 2px rgba(10,156,184,.15);background:#FFF;
+  }
+  .multi-row-table .row-num{
+    font-weight:800;color:var(--c-violet);background:#FAF5FF;width:36px;
+  }
+  .multi-row-table .btn-del{
+    width:30px;height:30px;border-radius:8px;border:none;
+    background:#FEE2E2;color:#DC2626;font-weight:900;
+    font-family:inherit;font-size:1.1rem;cursor:pointer;line-height:1;
+    transition:.15s;
+  }
+  .multi-row-table .btn-del:hover{background:#FECACA;transform:scale(1.05);}
+  .multi-row-actions{
+    display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;
+  }
+  .btn-add{
+    flex:1;padding:10px 14px;border-radius:10px;
+    background:linear-gradient(135deg,var(--c-emerald),var(--c-teal));
+    color:#fff;border:none;font-family:inherit;font-size:.86rem;font-weight:800;
+    cursor:pointer;box-shadow:0 3px 10px rgba(5,150,105,.25);
+    transition:.2s;
+  }
+  .btn-add:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(5,150,105,.35);}
+  .btn-clear-all{
+    padding:10px 14px;border-radius:10px;
+    background:#FFF;border:1.5px solid var(--c-rose);
+    color:var(--c-rose);font-family:inherit;font-size:.86rem;font-weight:800;
+    cursor:pointer;transition:.2s;
+  }
+  .btn-clear-all:hover{background:#FFF5F9;}
   .hist-btn{
     position:fixed;bottom:22px;right:22px;z-index:60;width:54px;height:54px;border-radius:50%;
     background:linear-gradient(135deg,var(--c-indigo),var(--c-violet));
@@ -462,6 +512,8 @@
     .data-table{font-size:.7rem;}
     .data-table th,.data-table td{padding:5px 4px;}
     .class-btn{padding:7px 11px;font-size:.76rem;}
+    .multi-row-table{font-size:.75rem;}
+    .multi-row-table input{font-size:.78rem;padding:6px 4px;}
   }
 </style>
 </head>
@@ -595,13 +647,13 @@ const UNITS = {
     hint:'جدول NPS (اینچ) ↔ DN (mm) ↔ OD واقعی (mm).',base:'DN',special:'pipe',
     units:{NPS:{label:'NPS (اینچ)'},DN:{label:'DN (mm)'},OD:{label:'OD (mm)'}}},
   flange:{title:'ابعاد فلنج (ASME B16.5)',icon:'🔩',badge:'Flange Dimensions',
-    hint:'ابعاد کامل فلنج‌ها در تمام کلاس‌های فشار ۱۵۰ تا ۲۵۰۰ — ASME B16.5. (OD: قطر خارجی، BC: دایره پیچ، RF: سطح برجسته، Bolts: تعداد و قطر پیچ)',
+    hint:'ابعاد کامل فلنج‌ها در تمام کلاس‌های فشار ۱۵۰ تا ۲۵۰۰ — ASME B16.5.',
     base:'class',special:'flange',units:{class:{label:'کلاس فشار'}}},
   pipewall:{title:'ضخامت لوله (ASME B36.10M)',icon:'📏',badge:'Pipe Wall Thickness',
-    hint:'ضخامت جداره لوله‌های فولادی در تمام رده‌های استاندارد (Sch 5S تا XXS) — ASME B36.10M.',
+    hint:'ضخامت جداره لوله‌های فولادی در تمام رده‌های استاندارد (Sch 5S تا XXS).',
     base:'nps',special:'pipewall',units:{nps:{label:'NPS (اینچ)'}}},
   heat:{title:'ظرفیت حرارتی / توان',icon:'🔥',badge:'Heat Capacity',
-    hint:'تبدیل بین واحدهای متداول بار حرارتی و توان در صنعت تاسیسات و بخار.',base:'kcal_hr',
+    hint:'تبدیل بین واحدهای متداول بار حرارتی و توان.',base:'kcal_hr',
     units:{kcal_hr:{label:'kcal/hr',factor:1},kW:{label:'kW',factor:860.421},MW:{label:'MW',factor:860421},
       W:{label:'W',factor:0.860421},BTU_hr:{label:'BTU/hr',factor:0.252},BHP:{label:'BHP (Boiler HP)',factor:8434.5},
       TR:{label:'تن تبرید (TR)',factor:3024.84},HP:{label:'HP (اسب بخار)',factor:641.19},MJ_hr:{label:'MJ/hr',factor:238.846}}},
@@ -619,7 +671,7 @@ const UNITS = {
       mmHg:{label:'mmHg',factor:0.00133322},mbar:{label:'mbar',factor:0.001},
       inHg:{label:'inHg',factor:0.0338639},mH2O:{label:'m H₂O (ستون آب)',factor:0.0980665},
       mmH2O:{label:'mm H₂O',factor:0.0000980665}}},
-  volume:{title:'حجم',icon:'🧪',badge:'Volume',hint:'تبدیل واحدهای حجم — لیتر، متر مکعب، گالن، بشکه.',base:'L',
+  volume:{title:'حجم',icon:'🧪',badge:'Volume',hint:'تبدیل واحدهای حجم.',base:'L',
     units:{L:{label:'لیتر (L)',factor:1},m3:{label:'m³',factor:1000},cm3:{label:'cm³',factor:0.001},
       ft3:{label:'ft³',factor:28.3168},in3:{label:'in³',factor:0.0163871},
       US_gal:{label:'گالن آمریکایی',factor:3.78541},UK_gal:{label:'گالن انگلیسی',factor:4.54609},
@@ -634,7 +686,7 @@ const UNITS = {
       GPD_US:{label:'GPD (US، گالن/روز)',factor:0.000157725},MGD_US:{label:'MGD (میلیون گالن/روز)',factor:157.725},
       CFM:{label:'CFM (ft³/min)',factor:1.699},SCFM:{label:'SCFM (استاندارد)',factor:1.699},
       m3_s:{label:'m³/s',factor:3600},ft3_hr:{label:'ft³/hr',factor:0.0283168}}},
-  mflow:{title:'دبی جرمی',icon:'⚖️',badge:'Mass Flow',hint:'تبدیل دبی جرمی — بخار، آب تغذیه، کندانس.',base:'kg_hr',
+  mflow:{title:'دبی جرمی',icon:'⚖️',badge:'Mass Flow',hint:'تبدیل دبی جرمی.',base:'kg_hr',
     units:{kg_hr:{label:'kg/hr',factor:1},kg_s:{label:'kg/s',factor:3600},g_s:{label:'g/s',factor:3.6},
       lb_hr:{label:'lb/hr',factor:0.453592},ton_hr:{label:'ton/hr (متریک)',factor:1000},
       lb_min:{label:'lb/min',factor:27.2155},ton_day:{label:'ton/day',factor:41.6667}}},
@@ -654,7 +706,7 @@ const UNITS = {
   velocity:{title:'سرعت',icon:'🚀',badge:'Velocity',hint:'تبدیل سرعت.',base:'m_s',
     units:{m_s:{label:'m/s',factor:1},km_hr:{label:'km/h',factor:0.277778},ft_s:{label:'ft/s',factor:0.3048},
       mph:{label:'mile/h',factor:0.44704},knot:{label:'knot',factor:0.514444}}},
-  hardness:{title:'سختی آب',icon:'💎',badge:'Water Hardness',hint:'تبدیل سختی آب — برای طراحی سختی‌گیر.',base:'ppm',
+  hardness:{title:'سختی آب',icon:'💎',badge:'Water Hardness',hint:'تبدیل سختی آب.',base:'ppm',
     units:{ppm:{label:'ppm CaCO₃',factor:1},mg_L:{label:'mg/L',factor:1},
       grain_gal_US:{label:'grain/gal (US)',factor:17.12},grain_gal_UK:{label:'grain/gal (UK)',factor:14.3},
       french:{label:'French degree (°f)',factor:10},german:{label:'German degree (°dH)',factor:17.8},
@@ -664,18 +716,18 @@ const UNITS = {
     units:{kcal:{label:'kcal',factor:1},kJ:{label:'kJ',factor:0.239006},kWh:{label:'kWh',factor:860.421},
       BTU:{label:'BTU',factor:0.252},MJ:{label:'MJ',factor:239.006},therm:{label:'therm',factor:25210.4},
       J:{label:'J',factor:0.000239006}}},
-  enthalpy:{title:'آنتالپی / آنتروپی',icon:'🔥',badge:'Enthalpy',hint:'تبدیل آنتالپی مخصوص و آنتروپی مخصوص.',base:'kcal_kg',
+  enthalpy:{title:'آنتالپی / آنتروپی',icon:'🔥',badge:'Enthalpy',hint:'تبدیل آنتالپی مخصوص.',base:'kcal_kg',
     units:{kcal_kg:{label:'kcal/kg',factor:1},kJ_kg:{label:'kJ/kg',factor:0.239006},
       BTU_lb:{label:'BTU/lb',factor:0.5556},kWh_kg:{label:'kWh/kg',factor:860.421}}},
   density:{title:'چگالی',icon:'🧊',badge:'Density',hint:'تبدیل چگالی.',base:'kg_m3',
     units:{kg_m3:{label:'kg/m³',factor:1},g_cm3:{label:'g/cm³',factor:1000},kg_L:{label:'kg/L',factor:1000},
       lb_ft3:{label:'lb/ft³',factor:16.0185},lb_gal:{label:'lb/gal (US)',factor:119.826}}},
-  heatx:{title:'شار حرارتی / U و k',icon:'♨️',badge:'Heat Transfer',hint:'تبدیل ضرایب انتقال حرارت (U) و هدایت (k).',base:'W_m2K',
+  heatx:{title:'شار حرارتی / U و k',icon:'♨️',badge:'Heat Transfer',hint:'تبدیل ضرایب انتقال حرارت.',base:'W_m2K',
     units:{W_m2K:{label:'W/(m²·K)',factor:1},W_m2C:{label:'W/(m²·°C)',factor:1},
       kcal_hr_m2C:{label:'kcal/(hr·m²·°C)',factor:1.163},BTU_hr_ft2F:{label:'BTU/(hr·ft²·°F)',factor:5.67826},
       kW_m2K:{label:'kW/(m²·K)',factor:1000},W_mK:{label:'W/(m·K) — هدایت',factor:1},
       kcal_hr_mC:{label:'kcal/(hr·m·°C)',factor:1.163},BTU_hr_ftF:{label:'BTU/(hr·ft·°F)',factor:1.7307}}},
-  tds:{title:'غلظت / TDS',icon:'💦',badge:'TDS',hint:'تبدیل غلظت. رابطه تجربی: ۱ µS/cm ≈ ۰.۵-۰.۷ ppm.',base:'ppm',
+  tds:{title:'غلظت / TDS',icon:'💦',badge:'TDS',hint:'تبدیل غلظت. ۱ µS/cm ≈ ۰.۵-۰.۷ ppm.',base:'ppm',
     units:{ppm:{label:'ppm',factor:1},mg_L:{label:'mg/L',factor:1},uS_cm:{label:'µS/cm',factor:0.6},
       mS_cm:{label:'mS/cm',factor:600},percent:{label:'%',factor:10000},g_L:{label:'g/L',factor:1000},
       dS_m:{label:'dS/m (EC)',factor:600}}},
@@ -683,7 +735,7 @@ const UNITS = {
     units:{Cv:{label:'Cv (US GPM/√psi)',factor:1},Kv:{label:'Kv (m³/hr/√bar)',factor:1.156}}},
 };
 
-/* ==================== PIPE TABLE (NPS↔DN↔OD) ==================== */
+/* ==================== PIPE TABLE ==================== */
 const PIPE_TABLE = [
   {nps:'½',dn:15,od:21.34},{nps:'¾',dn:20,od:26.67},{nps:'1',dn:25,od:33.40},{nps:'1¼',dn:32,od:42.16},
   {nps:'1½',dn:40,od:48.26},{nps:'2',dn:50,od:60.33},{nps:'2½',dn:65,od:73.03},{nps:'3',dn:80,od:88.90},
@@ -692,7 +744,7 @@ const PIPE_TABLE = [
   {nps:'18',dn:450,od:457.20},{nps:'20',dn:500,od:508.00},{nps:'24',dn:600,od:609.60},
 ];
 
-/* ==================== FLANGE DATA (ASME B16.5) ==================== */
+/* ==================== FLANGE DATA ==================== */
 const FLANGE_DATA = {
   150:[
     {nps:'1/2',dn:15,od:89,bc:60.3,rf:34.9,bolts:4,boltDia:15.9},{nps:'3/4',dn:20,od:98,bc:69.9,rf:42.9,bolts:4,boltDia:15.9},
@@ -777,7 +829,7 @@ const FLANGE_DATA = {
   ],
 };
 
-/* ==================== PIPE WALL THICKNESS (ASME B36.10M) ==================== */
+/* ==================== PIPE WALL THICKNESS ==================== */
 const PIPE_DATA = [
   {nps:'1/8',dn:6,od:10.3,sch10s:1.24,sch30:1.45,sch40:1.73,schStd:1.73,sch80:2.41,schXs:2.41},
   {nps:'1/4',dn:8,od:13.7,sch10s:1.65,sch30:1.85,sch40:2.24,schStd:2.24,sch80:3.02,schXs:3.02},
@@ -804,7 +856,7 @@ const PIPE_DATA = [
   {nps:'24',dn:600,od:610.0,sch5s:5.54,sch10s:6.35,sch10:6.35,sch20:9.53,sch30:14.27,sch40:17.48,schStd:9.53,sch60:24.61,sch80:30.96,schXs:30.96,sch100:38.89,sch120:46.02,sch140:52.37,sch160:59.54},
 ];
 
-/* ==================== STEAM SATURATION TABLE ==================== */
+/* ==================== STEAM SAT ==================== */
 const STEAM_SAT = [
   {p:0.3,t:69.1,hf:289.3,hfg:2336.1,vg:5.229},{p:0.5,t:81.3,hf:340.6,hfg:2305.4,vg:3.24},
   {p:1.0,t:99.6,hf:417.5,hfg:2258.0,vg:1.694},{p:2.0,t:120.2,hf:504.7,hfg:2201.9,vg:0.8857},
@@ -841,14 +893,13 @@ const FLUIDS = [
   {key:'air',name:'هوا (۲۰°C)',rho:1.205},{key:'custom',name:'سفارشی',rho:1000},
 ];
 
-/* ==================== SMART WARNINGS ==================== */
 function smartWarn(title, msg){
   return `<div class="smart-warn"><div class="icon">!</div><div class="content"><strong>${title}</strong><p>${msg}</p></div></div>`;
 }
 
 /* ==================== FAVORITES ==================== */
 let favUnits = lsGet(LS_FAV_UNITS, ['pipe','flange','pipewall','steam','vflow']);
-let favPrac = lsGet(LS_FAV_PRAC, ['flowVol','steamHeat','softener','blowdown']);
+let favPrac = lsGet(LS_FAV_PRAC, ['flowVol','steamHeat','softener','blowdown','pipeSurface','furnaceSurface']);
 
 function toggleFavUnit(){
   const idx = favUnits.indexOf(activeUnit);
@@ -972,7 +1023,6 @@ function loadUnit(){
   const rowWrap = fromSel.parentElement;
 
   if(u.special === 'flange' || u.special === 'pipewall'){
-    // برای فلنج و لوله، انتخاب واحد مخفی می‌شود
     rowWrap.style.display = 'none';
   } else {
     rowWrap.style.display = '';
@@ -990,22 +1040,22 @@ function loadUnit(){
   let showInfo = false;
   if(activeUnit==='pipe'){
     showInfo = true;
-    infoText.innerHTML = `<b>بوشن ۲ اینچ:</b> NPS 2" = DN 50 = OD 60.33 mm. عدد «۶» به قطر خارجی ۶۰.۳ mm اشاره دارد، نه DN 60.<br><b>مثال‌ها:</b> ½"=DN15 · ¾"=DN20 · ۱"=DN25 · ۱½"=DN40 · <b>۲"=DN50</b> · ۳"=DN80 · ۴"=DN100.`;
+    infoText.innerHTML = `<b>بوشن ۲ اینچ:</b> NPS 2" = DN 50 = OD 60.33 mm. عدد «۶» به قطر خارجی ۶۰.۳ mm اشاره دارد، نه DN 60.`;
   } else if(activeUnit==='flange'){
     showInfo = true;
-    infoText.innerHTML = `<b>ASME B16.5 — فلنج‌های فولادی.</b> کلاس‌های فشار: ۱۵۰، ۳۰۰، ۴۰۰، ۶۰۰، ۹۰۰، ۱۵۰۰، ۲۵۰۰.<br><b>OD</b>: قطر خارجی فلنج · <b>BC</b>: دایره پیچ · <b>RF</b>: سطح برجسته · <b>Bolts</b>: تعداد × قطر پیچ (mm).`;
+    infoText.innerHTML = `<b>ASME B16.5.</b> کلاس‌ها: ۱۵۰، ۳۰۰، ۴۰۰، ۶۰۰، ۹۰۰، ۱۵۰۰، ۲۵۰۰.<br><b>OD</b>: قطر خارجی · <b>BC</b>: دایره پیچ · <b>RF</b>: سطح برجسته · <b>Bolts</b>: تعداد × قطر پیچ (mm).`;
   } else if(activeUnit==='pipewall'){
     showInfo = true;
-    infoText.innerHTML = `<b>ASME B36.10M — لوله‌های فولادی بدون درز و جوشی.</b> رده‌ها: 5S، 10S، 10، 20، 30، 40، STD، 60، 80، XS، 100، 120، 140، 160، XXS.<br>همه ضخامت‌ها بر حسب میلی‌متر.`;
+    infoText.innerHTML = `<b>ASME B36.10M.</b> رده‌ها: 5S، 10S، 10، 20، 30، 40، STD، 60، 80، XS، 100، 120، 140، 160، XXS.<br>همه ضخامت‌ها بر حسب میلی‌متر.`;
   } else if(activeUnit==='tds'){
     showInfo = true;
-    infoText.innerHTML = `رابطه تجربی: ۱ µS/cm ≈ ۰.۵ تا ۰.۷ ppm TDS (میانگین ۰.۶).`;
+    infoText.innerHTML = `رابطه تجربی: ۱ µS/cm ≈ ۰.۵ تا ۰.۷ ppm TDS.`;
   } else if(activeUnit==='cv'){
     showInfo = true;
     infoText.innerHTML = `فرمول: Cv = 1.156 × Kv · Kv = 0.865 × Cv`;
   } else if(activeUnit==='pressure'){
     showInfo = true;
-    infoText.innerHTML = `<b>·g (نسبی):</b> نسبت به اتمسفر · <b>·a (مطلق):</b> نسبت به خلأ<br><b>تبدیل:</b> P<sub>abs</sub> = P<sub>gauge</sub> + ۱.۰۱۳ bar`;
+    infoText.innerHTML = `<b>·g (نسبی)</b> · <b>·a (مطلق)</b><br>P<sub>abs</sub> = P<sub>gauge</sub> + ۱.۰۱۳ bar`;
   } else if(activeUnit==='vflow'){
     showInfo = true;
     infoText.innerHTML = `<b>GPH</b>=گالن/ساعت · <b>GPD</b>=گالن/روز · <b>MGD</b>=میلیون گالن/روز · <b>Nm³/hr</b>=نرمال متر مکعب`;
@@ -1037,7 +1087,6 @@ function renderUnit(){
   const warnWrap = document.getElementById('unitWarnWrap');
   warnWrap.innerHTML = '';
 
-  /* === فلنج‌ها === */
   if(u.special === 'flange'){
     let html = `<div class="class-btn-row">`;
     [150,300,400,600,900,1500,2500].forEach(c => {
@@ -1057,7 +1106,6 @@ function renderUnit(){
     return;
   }
 
-  /* === ضخامت لوله === */
   if(u.special === 'pipewall'){
     const schedules = ['sch5s','sch10s','sch10','sch20','sch30','sch40','schStd','sch60','sch80','schXs','sch100','sch120','sch140','sch160','xxs'];
     const scheduleLabels = {sch5s:'5S',sch10s:'10S',sch10:'10',sch20:'20',sch30:'30',sch40:'40',schStd:'STD',sch60:'60',sch80:'80',schXs:'XS',sch100:'100',sch120:'120',sch140:'140',sch160:'160',xxs:'XXS'};
@@ -1080,7 +1128,6 @@ function renderUnit(){
     return;
   }
 
-  /* === دما === */
   if(u.special === 'temp'){
     const c = convertTempValue(v, from, 'C');
     const f = convertTempValue(v, from, 'F');
@@ -1095,7 +1142,6 @@ function renderUnit(){
     return;
   }
 
-  /* === سایز لوله (NPS/DN/OD) === */
   if(u.special === 'pipe'){
     let found = null;
     if(from === 'NPS'){
@@ -1125,7 +1171,6 @@ function renderUnit(){
     return;
   }
 
-  /* === استاندارد === */
   const fromU = u.units[from];
   const baseVal = v * fromU.factor;
   const baseU = u.units[u.base];
@@ -1153,10 +1198,7 @@ function renderUnit(){
   }
 }
 
-function selectFlangeClass(c){
-  flangeClass = c;
-  renderUnit();
-}
+function selectFlangeClass(c){ flangeClass = c; renderUnit(); }
 
 buildUnitDrawer();
 loadUnit();
@@ -1176,6 +1218,8 @@ const PRAC = [
   {key:'hxLMTD',title:'مبدل حرارتی LMTD',icon:'♨️',badge:'Heat Exchanger'},
   {key:'energyCost',title:'هزینه انرژی',icon:'💰',badge:'Energy Cost'},
   {key:'coilTank',title:'مخزن کویلی',icon:'🌀',badge:'Coil Tank Sizing'},
+  {key:'pipeSurface',title:'سطح حرارتی لوله',icon:'📐',badge:'Pipe Heat Surface'},
+  {key:'furnaceSurface',title:'سطح حرارتی کوره',icon:'🔥',badge:'Furnace Heat Surface'},
   {key:'fluids',title:'جدول سیالات',icon:'📖',badge:'Fluid Reference'},
 ];
 let activePrac = 'flowVol';
@@ -1211,7 +1255,8 @@ function renderPrac(){
     boilerCap: renderBoilerCap, pressHead: renderPressHead, softener: renderSoftener,
     blowdown: renderBlowdown, flash: renderFlash, steamPipe: renderSteamPipe,
     pumpPower: renderPumpPower, hxLMTD: renderHxLMTD, energyCost: renderEnergyCost,
-    coilTank: renderCoilTank, fluids: renderFluids
+    coilTank: renderCoilTank, pipeSurface: renderPipeSurface,
+    furnaceSurface: renderFurnaceSurface, fluids: renderFluids
   };
   c.innerHTML = renderers[activePrac] ? renderers[activePrac]() : '';
   setTimeout(()=>{
@@ -1219,12 +1264,13 @@ function renderPrac(){
       boilerCap:calcBoilerCap,pressHead:calcPressHead,softener:calcSoftener,
       blowdown:calcBlowdown,flash:calcFlash,steamPipe:calcSteamPipe,
       pumpPower:calcPumpPower,hxLMTD:calcHxLMTD,energyCost:calcEnergyCost,
-      coilTank:calcCoilTank};
+      coilTank:calcCoilTank,pipeSurface:calcPipeSurface,
+      furnaceSurface:calcFurnaceSurface};
     if(fns[activePrac]) fns[activePrac]();
   }, 10);
 }
 
-/* === محاسبات کاربردی === */
+/* === محاسبات کاربردی قبلی === */
 function renderFlowVol(){
   return `
   <div class="card prac">
@@ -1320,8 +1366,7 @@ function calcMassVol(){
       <div class="conv-item"><span class="ck">m³/hr</span><span class="cv">${fmt(volM3H,4)}</span></div>
       <div class="conv-item"><span class="ck">L/hr</span><span class="cv">${fmt(volM3H*1000,2)}</span></div>
       <div class="conv-item"><span class="ck">GPM</span><span class="cv">${fmt(volM3H/0.227125,3)}</span></div>
-    </div>
-    <div class="smart-info"><div class="icon">i</div><div class="content"><strong>چگالی</strong><p>${fmt(rho,1)} kg/m³</p></div></div>`;
+    </div>`;
   addHistory('دبی جرمی ↔ حجمی', fmt(massKgH,2)+' kg/hr');
 }
 
@@ -1330,7 +1375,6 @@ function renderSteamHeat(){
   <div class="card prac">
     <span class="badge cyan">Steam ↔ Heat ↔ Fuel</span>
     <h2>تبدیل ظرفیت بخار به بار حرارتی و مصرف سوخت</h2>
-    <p class="hint">مثال: «۳۰۰۰ kg/hr بخار در ۱۰ bar، چند kW بار حرارتی است؟»</p>
     <div class="row3">
       <div class="field"><label>دبی بخار</label><input type="number" id="sh_flow" value="3000" step="any" oninput="calcSteamHeat()"></div>
       <div class="field"><label>فشار کاری</label><input type="number" id="sh_p" value="10" step="any" oninput="calcSteamHeat()"><span class="unit">bar·g</span></div>
@@ -1391,7 +1435,6 @@ function renderBoilerCap(){
   <div class="card prac">
     <span class="badge cyan">Boiler Capacity</span>
     <h2>تبدیل واحدهای ظرفیت دیگ بخار و آبگرم</h2>
-    <p class="hint">تبدیل هم‌زمان kW، BHP، kg/hr بخار، kcal/hr، BTU/hr، تن تبرید و HP.</p>
     <div class="row">
       <div class="field"><label>مقدار</label><input type="number" id="bc_val" value="1000" step="any" oninput="calcBoilerCap()"></div>
       <div class="field"><label>واحد مبدأ</label>
@@ -1437,7 +1480,6 @@ function renderPressHead(){
   <div class="card prac">
     <span class="badge cyan">Pressure ↔ Head</span>
     <h2>تبدیل فشار به ستون آب و Head پمپ</h2>
-    <p class="hint">مهندسان مکانیک Head پمپ را با متر ستون آب بیان می‌کنند.</p>
     <div class="row">
       <div class="field"><label>مقدار</label><input type="number" id="ph_val" value="10" step="any" oninput="calcPressHead()"></div>
       <div class="field"><label>واحد مبدأ</label>
@@ -1467,8 +1509,7 @@ function calcPressHead(){
       <div class="conv-item"><span class="ck">psi</span><span class="cv">${fmt(bar/0.0689476,3)}</span></div>
       <div class="conv-item"><span class="ck">kPa</span><span class="cv">${fmt(bar*100,3)}</span></div>
       <div class="conv-item"><span class="ck">kg/cm²</span><span class="cv">${fmt(mH2O/10,4)}</span></div>
-    </div>
-    <div class="smart-info"><div class="icon">i</div><div class="content"><strong>رابطه</strong><p>۱ bar ≈ ۱۰.۲ m H₂O · ۱ psi ≈ ۰.۷۰۳ m H₂O</p></div></div>`;
+    </div>`;
   addHistory('فشار ↔ Head', fmt(mH2O,3)+' m H₂O');
 }
 
@@ -1476,7 +1517,7 @@ function renderSoftener(){
   return `
   <div class="card prac">
     <span class="badge cyan">Softener Design</span>
-    <h2>محاسبه ظرفیت سختی‌گیر (ppm·m³ ↔ grain)</h2>
+    <h2>محاسبه ظرفیت سختی‌گیر</h2>
     <div class="row3">
       <div class="field"><label>سختی آب</label><input type="number" id="sf_hard" value="300" step="any" oninput="calcSoftener()"><span class="unit">ppm</span></div>
       <div class="field"><label>دبی</label><input type="number" id="sf_flow" value="5" step="any" oninput="calcSoftener()"><span class="unit">m³/hr</span></div>
@@ -1504,7 +1545,6 @@ function calcSoftener(){
   const grainWithMargin = grain_US * 1.3;
   const resinFt3 = grainWithMargin / cap;
   const saltKg = resinFt3 * saltDose * 0.453592;
-  const warn = hard > 500 ? smartWarn('هشدار', 'سختی بالای ۵۰۰ ppm — پیش‌تصفیه توصیه می‌شود.') : '';
   document.getElementById('sf_result').innerHTML = `
     <div class="result-main"><div class="num">${fmt(grainWithMargin,0)} <small>grain</small></div>
       <div class="lbl">ظرفیت رزین لازم</div></div>
@@ -1515,8 +1555,7 @@ function calcSoftener(){
       <div class="conv-item"><span class="ck">حجم رزین</span><span class="cv">${fmt(resinFt3,2)} ft³</span></div>
       <div class="conv-item"><span class="ck">حجم رزین</span><span class="cv">${fmt(resinFt3*28.317,1)} L</span></div>
       <div class="conv-item"><span class="ck">نمک هر احیا</span><span class="cv">${fmt(saltKg,2)} kg</span></div>
-    </div>
-    ${warn}`;
+    </div>`;
   addHistory('سختی‌گیر', fmt(grainWithMargin,0)+' grain');
 }
 
@@ -1815,7 +1854,6 @@ function calcEnergyCost(){
   const rate2 = fuelKey === 'gas' ? qInput2 / f.HHV : qInput2 / f.LHV;
   const annualCost2 = rate2 * hrs * price;
   const savings = annualCost - annualCost2;
-  const warn = eff > 0.95 ? smartWarn('هشدار راندمان', 'راندمان بالای ۹۵٪ غیرممکن است.') : '';
   document.getElementById('ec_result').innerHTML = `
     <div class="result-main"><div class="num">${fmt(annualCost/1e9,2)} <small>میلیارد ریال</small></div>
       <div class="lbl">هزینه سالانه — راندمان ${(eff*100).toFixed(0)}٪</div></div>
@@ -1920,6 +1958,200 @@ function calcCoilTank(){
   addHistory('مخزن کویلی', fmt(V_final,0)+' L');
 }
 
+/* === 🆕 سطح حرارتی لوله === */
+let pipeRows = [{d:50, L:1000, qty:1}];
+
+function renderPipeSurface(){
+  return `
+  <div class="card prac">
+    <span class="badge cyan">Pipe Heat Surface</span>
+    <h2>محاسبه سطح حرارتی لوله</h2>
+    <p class="hint">فرمول: <b>سطح (m²) = (قطر داخلی mm × π × طول mm) ÷ ۱٬۰۰۰٬۰۰۰</b><br>می‌توانید چند لوله با اندازه‌های مختلف اضافه کنید.</p>
+    <div id="ps_table_wrap"></div>
+    <div class="multi-row-actions">
+      <button class="btn-add" onclick="addPipeRow()">+ افزودن لوله</button>
+      <button class="btn-clear-all" onclick="clearPipeRows()">پاک کردن همه</button>
+    </div>
+    <div id="ps_result"></div>
+  </div>`;
+}
+
+function renderPipeTable(){
+  const wrap = document.getElementById('ps_table_wrap');
+  if(!wrap) return;
+  let html = `<table class="multi-row-table">
+    <thead><tr>
+      <th style="width:36px;">#</th>
+      <th>قطر داخلی (mm)</th>
+      <th>طول (mm)</th>
+      <th>تعداد</th>
+      <th>سطح واحد (m²)</th>
+      <th>سطح کل (m²)</th>
+      <th style="width:44px;">×</th>
+    </tr></thead><tbody>`;
+  pipeRows.forEach((r, i) => {
+    const perUnit = (r.d * Math.PI * r.L) / 1000000;
+    const total = perUnit * r.qty;
+    html += `<tr>
+      <td class="row-num">${i+1}</td>
+      <td><input type="number" value="${r.d}" min="0" oninput="updatePipeRow(${i},'d',this.value)"></td>
+      <td><input type="number" value="${r.L}" min="0" oninput="updatePipeRow(${i},'L',this.value)"></td>
+      <td><input type="number" value="${r.qty}" min="1" oninput="updatePipeRow(${i},'qty',this.value)"></td>
+      <td style="font-weight:800;color:var(--c-cyan);">${fmt(perUnit,4)}</td>
+      <td style="font-weight:800;color:var(--c-violet);">${fmt(total,4)}</td>
+      <td><button class="btn-del" onclick="delPipeRow(${i})">×</button></td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  wrap.innerHTML = html;
+}
+
+function addPipeRow(){
+  const last = pipeRows[pipeRows.length-1] || {d:50, L:1000, qty:1};
+  pipeRows.push({d:last.d, L:last.L, qty:1});
+  renderPipeTable();
+  calcPipeSurface();
+}
+function delPipeRow(i){
+  pipeRows.splice(i, 1);
+  if(pipeRows.length === 0) pipeRows.push({d:50, L:1000, qty:1});
+  renderPipeTable();
+  calcPipeSurface();
+}
+function clearPipeRows(){
+  pipeRows = [{d:50, L:1000, qty:1}];
+  renderPipeTable();
+  calcPipeSurface();
+}
+function updatePipeRow(i, key, val){
+  pipeRows[i][key] = n(val);
+  renderPipeTable();
+  calcPipeSurface();
+}
+
+function calcPipeSurface(){
+  renderPipeTable();
+  let totalArea = 0;
+  let totalPipes = 0;
+  let totalLength = 0;
+  pipeRows.forEach(r => {
+    const perUnit = (r.d * Math.PI * r.L) / 1000000;
+    totalArea += perUnit * r.qty;
+    totalPipes += r.qty;
+    totalLength += (r.L / 1000) * r.qty;
+  });
+  document.getElementById('ps_result').innerHTML = `
+    <div class="result-main">
+      <div class="num">${fmt(totalArea,4)} <small>m²</small></div>
+      <div class="lbl">سطح حرارتی کل</div>
+    </div>
+    <div class="conv-grid">
+      <div class="conv-item"><span class="ck">تعداد کل لوله</span><span class="cv">${fmt(totalPipes,0)} عدد</span></div>
+      <div class="conv-item"><span class="ck">مجموع طول</span><span class="cv">${fmt(totalLength,2)} m</span></div>
+      <div class="conv-item"><span class="ck">سطح به cm²</span><span class="cv">${fmt(totalArea*10000,0)} cm²</span></div>
+      <div class="conv-item"><span class="ck">سطح به ft²</span><span class="cv">${fmt(totalArea*10.7639,3)} ft²</span></div>
+    </div>
+    <div class="smart-info"><div class="icon">i</div><div class="content"><strong>فرمول</strong><p>سطح = (قطر داخلی mm × π × طول mm) ÷ ۱٬۰۰۰٬۰۰۰ × تعداد</p></div></div>`;
+  addHistory('سطح حرارتی لوله', fmt(totalArea,4)+' m²');
+}
+
+/* === 🆕 سطح حرارتی کوره === */
+let furnaceRows = [{d:500, L:2000, qty:1}];
+
+function renderFurnaceSurface(){
+  return `
+  <div class="card prac orange">
+    <span class="badge">Furnace Heat Surface</span>
+    <h2>محاسبه سطح حرارتی کوره</h2>
+    <p class="hint">فرمول: <b>سطح (m²) = (قطر داخلی mm × π × طول mm) ÷ ۱٬۰۰۰٬۰۰۰</b><br>می‌توانید چند کوره یا چند بخش مختلف را اضافه کنید.</p>
+    <div id="fs_table_wrap"></div>
+    <div class="multi-row-actions">
+      <button class="btn-add" onclick="addFurnaceRow()">+ افزودن کوره</button>
+      <button class="btn-clear-all" onclick="clearFurnaceRows()">پاک کردن همه</button>
+    </div>
+    <div id="fs_result"></div>
+  </div>`;
+}
+
+function renderFurnaceTable(){
+  const wrap = document.getElementById('fs_table_wrap');
+  if(!wrap) return;
+  let html = `<table class="multi-row-table">
+    <thead><tr>
+      <th style="width:36px;">#</th>
+      <th>قطر داخلی (mm)</th>
+      <th>طول (mm)</th>
+      <th>تعداد</th>
+      <th>سطح واحد (m²)</th>
+      <th>سطح کل (m²)</th>
+      <th style="width:44px;">×</th>
+    </tr></thead><tbody>`;
+  furnaceRows.forEach((r, i) => {
+    const perUnit = (r.d * Math.PI * r.L) / 1000000;
+    const total = perUnit * r.qty;
+    html += `<tr>
+      <td class="row-num" style="color:var(--c-orange);background:#FFF7ED;">${i+1}</td>
+      <td><input type="number" value="${r.d}" min="0" oninput="updateFurnaceRow(${i},'d',this.value)"></td>
+      <td><input type="number" value="${r.L}" min="0" oninput="updateFurnaceRow(${i},'L',this.value)"></td>
+      <td><input type="number" value="${r.qty}" min="1" oninput="updateFurnaceRow(${i},'qty',this.value)"></td>
+      <td style="font-weight:800;color:var(--c-cyan);">${fmt(perUnit,4)}</td>
+      <td style="font-weight:800;color:var(--c-orange);">${fmt(total,4)}</td>
+      <td><button class="btn-del" onclick="delFurnaceRow(${i})">×</button></td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  wrap.innerHTML = html;
+}
+
+function addFurnaceRow(){
+  const last = furnaceRows[furnaceRows.length-1] || {d:500, L:2000, qty:1};
+  furnaceRows.push({d:last.d, L:last.L, qty:1});
+  renderFurnaceTable();
+  calcFurnaceSurface();
+}
+function delFurnaceRow(i){
+  furnaceRows.splice(i, 1);
+  if(furnaceRows.length === 0) furnaceRows.push({d:500, L:2000, qty:1});
+  renderFurnaceTable();
+  calcFurnaceSurface();
+}
+function clearFurnaceRows(){
+  furnaceRows = [{d:500, L:2000, qty:1}];
+  renderFurnaceTable();
+  calcFurnaceSurface();
+}
+function updateFurnaceRow(i, key, val){
+  furnaceRows[i][key] = n(val);
+  renderFurnaceTable();
+  calcFurnaceSurface();
+}
+
+function calcFurnaceSurface(){
+  renderFurnaceTable();
+  let totalArea = 0;
+  let totalCount = 0;
+  let totalLength = 0;
+  furnaceRows.forEach(r => {
+    const perUnit = (r.d * Math.PI * r.L) / 1000000;
+    totalArea += perUnit * r.qty;
+    totalCount += r.qty;
+    totalLength += (r.L / 1000) * r.qty;
+  });
+  document.getElementById('fs_result').innerHTML = `
+    <div class="result-main" style="background:linear-gradient(135deg,#FFF7ED 0%,#FFEDD5 100%);border-color:rgba(234,88,12,.3);">
+      <div class="num" style="color:var(--c-orange);text-shadow:0 2px 8px rgba(234,88,12,.15);">${fmt(totalArea,4)} <small style="color:var(--text-soft);">m²</small></div>
+      <div class="lbl">سطح حرارتی کل کوره</div>
+    </div>
+    <div class="conv-grid">
+      <div class="conv-item"><span class="ck">تعداد کل</span><span class="cv">${fmt(totalCount,0)} عدد</span></div>
+      <div class="conv-item"><span class="ck">مجموع طول</span><span class="cv">${fmt(totalLength,2)} m</span></div>
+      <div class="conv-item"><span class="ck">سطح به cm²</span><span class="cv">${fmt(totalArea*10000,0)} cm²</span></div>
+      <div class="conv-item"><span class="ck">سطح به ft²</span><span class="cv">${fmt(totalArea*10.7639,3)} ft²</span></div>
+    </div>
+    <div class="smart-info"><div class="icon">i</div><div class="content"><strong>فرمول</strong><p>سطح = (قطر داخلی mm × π × طول mm) ÷ ۱٬۰۰۰٬۰۰۰ × تعداد</p></div></div>`;
+  addHistory('سطح حرارتی کوره', fmt(totalArea,4)+' m²');
+}
+
 function renderFluids(){
   const rows = [
     ['آب (۲۰°C)','998','4.18','—','—'],['آب (۵۰°C)','988','4.18','—','—'],
@@ -1942,6 +2174,19 @@ function renderFluids(){
     </div>
   </div>`;
 }
+
+/* === رندر اولیه === */
+const originalRenderPrac = renderPrac;
+renderPrac = function(){
+  originalRenderPrac.call(this);
+  if(activePrac === 'pipeSurface'){
+    renderPipeTable();
+    calcPipeSurface();
+  } else if(activePrac === 'furnaceSurface'){
+    renderFurnaceTable();
+    calcFurnaceSurface();
+  }
+};
 
 buildPracDrawer();
 renderPrac();
